@@ -1,5 +1,54 @@
 # NOTICE
 
+English | [한국어](#notice-한국어)
+
+## License scope
+
+The `LICENSE` of this repository (Creative Commons Attribution 4.0 International, CC BY 4.0)
+**applies to the compilation and annotation data of SecLLM-Dataset**.
+
+CC BY 4.0 covers:
+
+- The composition, selection, structure, and schema of the dataset
+- Vulnerability type names and descriptions (`issueNameKo/En`, `issueDescriptionKo/En`)
+- Vulnerable and safe example code (`dangerousExampleKo/En`, `safeExampleKo/En`)
+- Static analysis results and trace annotations (`issueRisk`, `issueLineNumber`, `contexts`)
+
+## License of the original source code
+
+The `entireCode` field of each record contains **original source files from public open-source projects**.
+
+**That source code is not covered by CC BY 4.0 and remains under the original license of each work.**
+It was collected from code distributed under permissive licenses (MIT, Apache-2.0, BSD, etc.).
+When you use or redistribute that code, you must comply with the copyright notices and conditions required by its original license.
+
+The upstream corpus selected code by **repository-level** license. An individual file can still carry its own
+license header that differs from its repository's license; a header scan of release 1.0.0 found GPL-family
+license text in some files (see [DATASHEET.md](DATASHEET.md#bias-risks-and-limitations)). **Where a file's own header
+states a license, that header governs the file.** Check the header before reusing or redistributing any `entireCode`.
+
+## Data sources
+
+- Original source code: [bigcode/starcoderdata](https://huggingface.co/datasets/bigcode/starcoderdata)
+  (a corpus filtered to open-source code distributed under permissive licenses)
+- Vulnerability detection and annotations: Sparrow SAST static analysis results
+
+## Removal requests
+
+If you are a rights holder and want included source code removed, submit the
+[removal request form](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml).
+We will remove the affected records after verification.
+
+## Funding acknowledgment
+
+This dataset was produced with support from the Ministry of Science and ICT (MSIT) and the
+National IT Industry Promotion Agency (NIPA) of Korea under the
+"2026 Open Source AI/SW Development and Utilization Support Program (Utilization Track)".
+
+---
+
+# NOTICE (한국어)
+
 ## 라이선스 적용 범위
 
 본 저장소의 `LICENSE`(Creative Commons Attribution 4.0 International, CC BY 4.0)는
@@ -20,6 +69,11 @@ CC BY 4.0이 적용되는 부분은 다음과 같습니다.
 원본 소스는 허용적 라이선스(MIT, Apache-2.0, BSD 등)로 배포된 코드에서 수집되었으며,
 이용자는 해당 코드를 사용·재배포할 때 원 라이선스가 요구하는 저작권 고지 및 조건을 준수해야 합니다.
 
+원본 코퍼스는 **저장소 단위** 라이선스로 코드를 선별했습니다. 따라서 개별 파일에 저장소 라이선스와 다른 라이선스 머리글이
+있을 수 있으며, 1.0.0 릴리스의 머리글 검사에서 일부 파일에 GPL 계열 라이선스 문구가 확인되었습니다
+([DATASHEET.md](DATASHEET.md#bias-risks-and-limitations) 참조). **파일 머리글에 라이선스가 명시된 경우 해당 머리글이 그 파일에 적용됩니다.**
+`entireCode`를 재사용·재배포하기 전에 머리글을 확인하시기 바랍니다.
+
 ## 데이터 출처
 
 - 소스코드 원본: [bigcode/starcoderdata](https://huggingface.co/datasets/bigcode/starcoderdata)
@@ -28,7 +82,8 @@ CC BY 4.0이 적용되는 부분은 다음과 같습니다.
 
 ## 삭제 요청
 
-포함된 소스코드에 대해 권리자로서 삭제를 요청하려면 저장소 이슈로 알려 주시기 바랍니다.
+포함된 소스코드에 대해 권리자로서 삭제를 요청하려면
+[삭제 요청 양식](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml)으로 알려 주시기 바랍니다.
 확인 후 해당 레코드를 제거하겠습니다.
 
 ## 지원 사업 표기
