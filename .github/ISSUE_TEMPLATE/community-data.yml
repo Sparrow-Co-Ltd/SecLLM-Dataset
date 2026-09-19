@@ -1,0 +1,53 @@
+name: Community data proposal
+description: Propose records produced with a third-party analysis tool for data/community/.
+title: "[community-data] "
+labels: ["community-data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please read [data/community/README.md](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/blob/main/data/community/README.md) and [CONTRIBUTING.md](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/blob/main/CONTRIBUTING.md) first.
+        Community records are contributor-attested; maintainers check schema and provenance but do not re-run your tool.
+  - type: input
+    id: tool
+    attributes:
+      label: Tool and version
+      placeholder: semgrep 1.80.0
+    validations:
+      required: true
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      placeholder: java
+    validations:
+      required: true
+  - type: input
+    id: count
+    attributes:
+      label: Approximate number of records
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Source repositories and licenses
+      description: Where the code comes from and under which SPDX licenses. A license outside the allowlist needs maintainer approval first.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: How were patches verified?
+      description: Describe how you confirmed that the same tool no longer reports each issue after the patch.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: All source code is under an allowlisted permissive license and I may redistribute it.
+          required: true
+        - label: I will sign off every commit (DCO).
+          required: true

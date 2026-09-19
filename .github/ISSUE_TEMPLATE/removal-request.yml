@@ -1,0 +1,40 @@
+name: Removal request
+description: Ask for records containing your code or personal information to be removed.
+title: "[removal] "
+labels: ["removal-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues are public. **Do not paste the personal information you want removed.** Identify the records by upstream repository/path or by record line number instead.
+        If you cannot describe the request publicly, open an issue with only this form's first field filled in and ask a maintainer to reach out to you.
+  - type: dropdown
+    id: reason
+    attributes:
+      label: Reason
+      options:
+        - I am the copyright holder of the source code
+        - The record contains personal information
+        - License concern
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: upstream
+    attributes:
+      label: Upstream repository or file
+      description: URL of the repository or file the code came from.
+      placeholder: https://github.com/owner/repo/blob/main/src/Foo.java
+  - type: textarea
+    id: records
+    attributes:
+      label: Affected records (optional)
+      description: Data file and 1-based record line numbers, if known.
+      placeholder: data/java/input.jsonl lines 12, 345
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I am the rights holder, the person concerned, or authorized to act on their behalf.
+          required: true
