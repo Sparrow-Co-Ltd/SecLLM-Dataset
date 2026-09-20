@@ -81,7 +81,7 @@ SecLLM-Dataset/
 | 필드 | 타입 | 설명 |
 | --- | --- | --- |
 | `input` | object | 취약점 정보. 아래 14개 필드 참조 |
-| `output` | array | 취약점을 해결하는 코드 수정 목록(codeModifications). 아래 참조 |
+| `output` | array | 취약점을 해결하는 코드 수정 목록. 아래 참조 |
 
 ### `input` 필드
 
