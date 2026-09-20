@@ -1,0 +1,6 @@
+# Blank issues stay enabled for questions and for asking a maintainer to reach out privately.
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/security/advisories/new
+    about: Private report for issues in scripts, workflows, or secrets/personal data in the dataset. Vulnerabilities inside entireCode samples are intentional, not security reports.

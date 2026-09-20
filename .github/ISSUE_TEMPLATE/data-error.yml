@@ -1,0 +1,48 @@
+name: Data error
+description: Report a false positive, wrong label, wrong trace, or incorrect patch in a record.
+title: "[data-error] "
+labels: ["data-error"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the dataset. Maintainers re-verify reported core records (`data/java/`) with Sparrow SAST and ship corrections in the next release.
+        Vulnerabilities inside `entireCode` samples are intentional (they are the dataset) and are not security reports.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Error type
+      options:
+        - False positive (the code is not vulnerable)
+        - Wrong vulnerability type or risk level
+        - Patch does not fix the issue or breaks the code
+        - Wrong line numbers or trace (contexts)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: file
+    attributes:
+      label: Data file
+      placeholder: data/java/input.jsonl
+    validations:
+      required: true
+  - type: input
+    id: line
+    attributes:
+      label: Record line number(s)
+      description: 1-based line number of the record in the JSONL file (one record per line).
+      placeholder: "1234"
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What is wrong, and what should it be?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence (optional)
+      description: Tool output, reasoning, or a corrected patch.

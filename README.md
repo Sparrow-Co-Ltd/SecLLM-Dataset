@@ -1,130 +1,136 @@
 # SecLLM-Dataset
 
-> **보안 취약점 탐지·설명·패치 LLM 학습을 위한 정적분석 기반 데이터셋**
+English | [한국어](README.ko.md)
 
-SecLLM-Dataset은 정적 분석 도구(SAST)가 실제 오픈소스 코드에서 탐지한 보안 취약점을,
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Sparrow-Co-Ltd/SecLLM-Dataset/badge)](https://scorecard.dev/viewer/?uri=github.com/Sparrow-Co-Ltd/SecLLM-Dataset)
 
-LLM 학습·평가에 사용할 수 있는 JSON Lines 형식으로 정리한 데이터셋입니다.
+> **A static-analysis-based dataset for training LLMs to detect, explain, and patch security vulnerabilities**
 
-각 레코드는 단순한 `(코드, 라벨)` 쌍이 아니라 다음을 함께 제공합니다.
+SecLLM-Dataset collects security vulnerabilities that a static application security testing (SAST) tool
+found in real open-source code, packaged as JSON Lines for LLM training and evaluation.
 
-- 취약점이 발생한 **전체 소스 파일**과 **취약점 발생 라인**
-- 취약점 유형에 대한 **한/영 설명**
-- 같은 유형의 **취약한 예시 코드**와 **안전한 예시 코드** (한/영)
-- 정적 분석기가 판단에 이르기까지의 **추적 경로(taint flow)** — source → branch → sink
-- 취약점을 실제로 해결하는 **코드 수정 패치** — 패치 적용 후 SAST 재분석으로 해결이 확인된 수정만 수록
+Each record is more than a `(code, label)` pair. It provides:
 
-취약점 탐지뿐 아니라, 취약점 **설명 생성**, **패치 생성**,
-**추론 경로 학습** 등 다양한 태스크에 활용할 수 있습니다.
+- The **entire source file** where the vulnerability occurs and the **vulnerable line**
+- A **Korean/English description** of the vulnerability type
+- A **vulnerable example** and a **safe example** of the same type (Korean/English)
+- The **taint flow** the analyzer followed to reach its verdict: source → branch → sink
+- A **code patch** that actually fixes the vulnerability. Only patches confirmed by re-running SAST after applying them are included
+
+Besides detection, the data supports tasks such as **explanation generation**, **patch generation**,
+and **reasoning-path learning**.
+
+For motivation, collection process, limitations, and responsible use, see the [datasheet](DATASHEET.md).
 
 ---
 
-## 데이터셋 구성
+## Dataset layout
 
 ```
 SecLLM-Dataset/
 └── data/
-    └── java/
-        └── input.jsonl                   # Java 취약점 + 해결 확인된 패치 4,617건 (약 54MB)
+    ├── java/
+    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,617 records (~54 MB)
+    └── community/             # Community track: data from third-party tools (see below)
 ```
 
-파일 형식은 **JSON Lines** 입니다. 한 줄이 하나의 취약점 인스턴스(JSON 객체)에 해당하며,
-각 레코드는 취약점 정보(`input`)와 해당 취약점을 해결하는 패치(`output`)의 쌍으로 구성됩니다.
+Files are **JSON Lines**: one line is one vulnerability instance (a JSON object).
+Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
-> 언어별로 디렉터리를 분리하며, 앞으로 Java 외 언어가 추가될 예정입니다.
+> Data is split by language. Languages other than Java will be added.
 
----
+## Data tiers
 
-## 데이터 통계
+| Tier | Path | Produced by | Verification |
+| --- | --- | --- | --- |
+| Core | `data/java/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
+| Community | `data/community/<lang>/` | Third-party tools (e.g. Semgrep, CodeQL), contributed by the community | Attested by the contributor; CI checks schema and provenance only |
 
-### 파일별
-
-
-| 파일            | 레코드 수 | 형식             | 크기      |
-| ------------- | ----- | -------------- | ------- |
-| `input.jsonl` | 4,617 | input + output | 약 54 MB |
-
-
-### 전체 (`input.jsonl` 기준)
-
-
-| 항목        | 값                         |
-| --------- | ------------------------- |
-| 레코드 수     | 4,617                     |
-| 언어        | Java (`.java`)            |
-| 고유 취약점 유형 | 101종                      |
-| 파일 크기     | 약 54 MB                   |
-| 코드 길이(라인) | 최소 9 / 중앙값 117 / 최대 2,998 |
-
+Community records use the same `input`/`output` schema plus a required `meta` object with provenance
+(tool, rule, source repository, license). See [data/community/README.md](data/community/README.md).
 
 ---
 
-## 데이터 스키마
+## Statistics
 
-각 레코드는 최상위에 `input`(취약점 정보)과 `output`(패치) 2개 필드를 가집니다.
+### By file
 
+| File | Records | Format | Size |
+| --- | --- | --- | --- |
+| `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
 
-| 필드       | 타입     | 설명                                           |
-| -------- | ------ | -------------------------------------------- |
-| `input`  | object | 취약점 정보. 아래 14개 필드 참조                         |
-| `output` | array  | 취약점을 해결하는 코드 수정 목록(codeModifications). 아래 참조 |
+### Overall (`data/java/input.jsonl`)
 
+| Item | Value |
+| --- | --- |
+| Records | 4,617 |
+| Language | Java (`.java`) |
+| Unique vulnerability types | 101 |
+| File size | ~54 MB (56,475,076 bytes) |
+| Code length (lines) | min 9 / median 117 / max 2,998 |
 
-### `input` 필드
-
-`input` 객체는 아래 14개 필드를 가집니다.
-
-
-| 필드                    | 타입     | 설명                                          |
-| --------------------- | ------ | ------------------------------------------- |
-| `fileExtension`       | string | 원본 파일 확장자 (예: `.java`)                      |
-| `programmingLanguage` | string | 프로그래밍 언어 (예: `Java`)                        |
-| `issueRisk`           | string | 위험도. `매우 높음` / `높음` / `보통` / `낮음` / `매우 낮음` |
-| `issueNameEn`         | string | 취약점 유형명 (영문)                                |
-| `issueNameKo`         | string | 취약점 유형명 (한글)                                |
-| `issueDescriptionEn`  | string | 취약점 유형 설명 (영문)                              |
-| `issueDescriptionKo`  | string | 취약점 유형 설명 (한글)                              |
-| `issueLineNumber`     | int    | 취약점이 보고된 라인 번호 (1-based, `entireCode` 기준)   |
-| `entireCode`          | string | 취약점이 포함된 **전체 소스 파일 원문**                    |
-| `dangerousExampleEn`  | string | 해당 유형의 취약한 예시 코드 (영문 주석, 라인 번호 포함)          |
-| `dangerousExampleKo`  | string | 해당 유형의 취약한 예시 코드 (한글 주석, 라인 번호 포함)          |
-| `safeExampleEn`       | string | 해당 유형의 안전한 예시 코드 (영문 주석, 라인 번호 포함)          |
-| `safeExampleKo`       | string | 해당 유형의 안전한 예시 코드 (한글 주석, 라인 번호 포함)          |
-| `contexts`            | array  | 정적 분석기의 추적 경로. 아래 참조                        |
-
-
-`dangerousExample*` / `safeExample*` 는 **사전에 정의된 예시**이며, `entireCode`에서 발췌한 코드가 아닙니다.
-
-#### `contexts[]` 필드
-
-`contexts`는 취약점 판정에 이르기까지의 데이터 흐름을 순서대로 담은 배열입니다.
-
-
-| 필드           | 타입     | 설명                                                       |
-| ------------ | ------ | -------------------------------------------------------- |
-| `lineNo`     | int    | 해당 이벤트가 발생한 라인 번호 (`entireCode` 기준)                      |
-| `eventType`  | string | `source` / `branch` / `sink`                             |
-| `messageKey` | string | 분석기 내부 메시지 식별자 (예: `jfsyn.DIRECT_USE_OF_THREADS.defect`) |
-| `message`    | string | 사람이 읽을 수 있는 설명 (한글)                                      |
-| `params`     | object | `message`에 삽입된 변수 값. 없으면 `{}`                            |
-
-
-### `output[]` 필드
-
-
-| 필드          | 타입            | 설명                                                       |
-| ----------- | ------------- | -------------------------------------------------------- |
-| `type`      | string        | `delete` / `add`                                         |
-| `startLine` | int           | 대상 라인 번호 (1-based, **수정 전 `entireCode` 기준**)             |
-| `endLine`   | int | null    | `delete` 시 삭제 구간의 끝 라인(포함). `add`는 `null`                |
-| `content`   | string | null | `add` 시 `startLine` 앞에 삽입할 코드(여러 줄 가능). `delete`는 `null` |
-
-
-모든 라인 번호는 수정 전 원본 코드 기준이며, `delete`는 `startLine`~`endLine`라인을 삭제하고`add`는 원본의` startLine`위치 앞에`content`를 삽입합니다(파일 끝을 넘는 경우 맨 뒤에 추가).
+Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
 
 ---
 
-## 데이터 예시
+## Schema
+
+Each record has two top-level fields: `input` (vulnerability information) and `output` (patch).
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `input` | object | Vulnerability information. See the 14 fields below |
+| `output` | array | Code modifications that fix the vulnerability. See below |
+
+### `input` fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `fileExtension` | string | Source file extension (e.g. `.java`) |
+| `programmingLanguage` | string | Programming language (e.g. `Java`) |
+| `issueRisk` | string | Risk level: `매우 높음` (very high) / `높음` (high) / `보통` (medium) / `낮음` (low) / `매우 낮음` (very low) |
+| `issueNameEn` | string | Vulnerability type name (English) |
+| `issueNameKo` | string | Vulnerability type name (Korean) |
+| `issueDescriptionEn` | string | Vulnerability type description (English) |
+| `issueDescriptionKo` | string | Vulnerability type description (Korean) |
+| `issueLineNumber` | int | Reported line number (1-based, relative to `entireCode`) |
+| `entireCode` | string | **Full original source file** containing the vulnerability |
+| `dangerousExampleEn` | string | Vulnerable example for this type (English comments, with line numbers) |
+| `dangerousExampleKo` | string | Vulnerable example for this type (Korean comments, with line numbers) |
+| `safeExampleEn` | string | Safe example for this type (English comments, with line numbers) |
+| `safeExampleKo` | string | Safe example for this type (Korean comments, with line numbers) |
+| `contexts` | array | Analyzer trace. See below |
+
+`dangerousExample*` / `safeExample*` are **predefined examples** per vulnerability type, not excerpts from `entireCode`.
+
+#### `contexts[]` fields
+
+`contexts` lists, in order, the data-flow events that led to the finding.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `lineNo` | int | Line where the event occurs (relative to `entireCode`) |
+| `eventType` | string | `source` / `branch` / `sink` |
+| `messageKey` | string | Analyzer message identifier (e.g. `jfsyn.DIRECT_USE_OF_THREADS.defect`) |
+| `message` | string | Human-readable explanation (Korean) |
+| `params` | object | Values substituted into `message`; `{}` if none |
+
+### `output[]` fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `type` | string | `delete` / `add` |
+| `startLine` | int | Target line (1-based, **relative to the original `entireCode`**) |
+| `endLine` | int \| null | For `delete`, last deleted line (inclusive). `null` for `add` |
+| `content` | string \| null | For `add`, code inserted before `startLine` (may span lines). `null` for `delete` |
+
+All line numbers refer to the original code before modification. `delete` removes lines `startLine` through `endLine`;
+`add` inserts `content` before line `startLine` of the original (appended at the end if past the last line).
+
+---
+
+## Example
 
 ```json
 {
@@ -171,9 +177,9 @@ SecLLM-Dataset/
 
 ---
 
-## 사용 방법
+## Usage
 
-### Python (표준 라이브러리)
+### Python (standard library)
 
 ```python
 import json
@@ -186,13 +192,13 @@ with open("data/java/input.jsonl", encoding="utf-8") as f:
 print(len(records))                      # 4617
 r = records[0]
 inp = r["input"]
-print(inp["issueNameKo"], inp["issueRisk"])  # 스레드의 직접 사용 높음
+print(inp["issueNameEn"], inp["issueRisk"])  # Direct Use of Threads 높음
 
-# 취약점이 발생한 라인 확인
+# Show the vulnerable line
 lines = inp["entireCode"].split("\n")
 print(lines[inp["issueLineNumber"] - 1])
 
-# 패치(코드 수정 목록) 확인
+# Show the patch (code modifications)
 for mod in r["output"]:
     print(mod["type"], mod["startLine"], mod["endLine"])
 ```
@@ -207,4 +213,61 @@ inputs = pd.json_normalize(df["input"])
 print(inputs["issueNameEn"].value_counts())
 ```
 
-> 파일이 약 54MB이므로 전체를 메모리에 올릴 수 있지만, 대용량 처리 시에는 스트리밍 방식을 권장합니다.
+> The file is about 54 MB and fits in memory, but streaming is recommended for large-scale processing.
+
+---
+
+## Validation
+
+`scripts/validate.py` checks the schema and cross-field rules (line ranges, `delete`/`add` semantics, community provenance). It needs only the Python standard library.
+
+```bash
+python scripts/validate.py --self-test                     # validator checks itself
+python scripts/validate.py                                 # validate every data/**/*.jsonl
+python scripts/validate.py --stats data/java/input.jsonl   # print statistics
+```
+
+## Citation
+
+Citation metadata is in [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button).
+
+```bibtex
+@misc{secllm_dataset_2026,
+  title        = {SecLLM-Dataset: A Static-Analysis-Based Dataset for Vulnerability Detection, Explanation, and Repair with LLMs},
+  author       = {{Sparrow Co., Ltd.}},
+  year         = {2026},
+  howpublished = {\url{https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset}},
+  note         = {Version 1.0.0}
+}
+```
+
+## Contributing
+
+Core data is changed only by the maintainers after re-verification with Sparrow SAST. You can help by reporting
+data errors, sending documentation or script improvements, or contributing third-party-tool data to the community track.
+
+- [CONTRIBUTING.md](CONTRIBUTING.md): how to contribute (commits must be signed off under the DCO)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): community standards
+- [SECURITY.md](SECURITY.md): how to report security issues
+- [GOVERNANCE.md](GOVERNANCE.md): how decisions are made
+- [CHANGELOG.md](CHANGELOG.md): release history
+
+## Getting help
+
+- Questions and data errors: [GitHub Issues](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues)
+- Security issues: follow [SECURITY.md](SECURITY.md) (do not open a public issue)
+- Removal requests from rights holders: [removal request form](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml)
+
+## License
+
+The compilation and annotations of SecLLM-Dataset are licensed under
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE).
+
+The `entireCode` field contains original source files from public open-source projects. That code is **not**
+covered by CC BY 4.0 and remains under its original licenses. See [NOTICE.md](NOTICE.md) for the exact scope.
+
+## Acknowledgments
+
+This dataset was produced with support from the Ministry of Science and ICT (MSIT) and the
+National IT Industry Promotion Agency (NIPA) of Korea under the
+"2026 Open Source AI/SW Development and Utilization Support Program (Utilization Track)".

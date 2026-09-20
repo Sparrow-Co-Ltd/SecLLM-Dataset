@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it using the metadata from this file."
+type: dataset
+title: "SecLLM-Dataset: A Static-Analysis-Based Dataset for Vulnerability Detection, Explanation, and Repair with LLMs"
+authors:
+  - name: "Sparrow Co., Ltd."
+license: CC-BY-4.0
+version: 1.0.0
+date-released: 2026-09-19
+repository-code: "https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset"
+url: "https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset"
+abstract: >-
+  A JSON Lines dataset of security vulnerabilities found by static analysis (SAST)
+  in real open-source Java code. Each record includes the full source file, the
+  reported line, bilingual (Korean/English) type descriptions and examples, the
+  analyzer's data-flow trace, and a patch whose fix was confirmed by re-running SAST.
+keywords:
+  - dataset
+  - security
+  - vulnerability detection
+  - static analysis
+  - SAST
+  - program repair
+  - large language models
+  - Java
