@@ -22,10 +22,13 @@ The `entireCode` field of each record contains **original source files from publ
 It was collected from code distributed under permissive licenses (MIT, Apache-2.0, BSD, etc.).
 When you use or redistribute that code, you must comply with the copyright notices and conditions required by its original license.
 
-The upstream corpus selected code by **repository-level** license. An individual file can still carry its own
-license header that differs from its repository's license; a header scan of release 1.0.0 found GPL-family
-license text in some files (see [DATASHEET.md](DATASHEET.md#bias-risks-and-limitations)). **Where a file's own header
-states a license, that header governs the file.** Check the header before reusing or redistributing any `entireCode`.
+The upstream corpus selected code by **repository-level** license, not by file. An individual file can still carry its
+own license header that differs from its repository's license: a scan of release 1.0.0 found GPL-family license text
+(GPL, LGPL, AGPL) in roughly 80 of the 4,617 files, under 2%
+(see [DATASHEET.md](DATASHEET.md#bias-risks-and-limitations)).
+**Where a file's own header states a license, that header governs the file.** Check the header before reusing or
+redistributing any `entireCode`. Those records are scheduled for removal in a future release; until then, follow the
+license stated in each file's header.
 
 ## Data sources
 
@@ -69,10 +72,11 @@ CC BY 4.0이 적용되는 부분은 다음과 같습니다.
 원본 소스는 허용적 라이선스(MIT, Apache-2.0, BSD 등)로 배포된 코드에서 수집되었으며,
 이용자는 해당 코드를 사용·재배포할 때 원 라이선스가 요구하는 저작권 고지 및 조건을 준수해야 합니다.
 
-원본 코퍼스는 **저장소 단위** 라이선스로 코드를 선별했습니다. 따라서 개별 파일에 저장소 라이선스와 다른 라이선스 머리글이
-있을 수 있으며, 1.0.0 릴리스의 머리글 검사에서 일부 파일에 GPL 계열 라이선스 문구가 확인되었습니다
-([DATASHEET.md](DATASHEET.md#bias-risks-and-limitations) 참조). **파일 머리글에 라이선스가 명시된 경우 해당 머리글이 그 파일에 적용됩니다.**
-`entireCode`를 재사용·재배포하기 전에 머리글을 확인하시기 바랍니다.
+원본 코퍼스는 파일이 아니라 **저장소 단위** 라이선스로 코드를 선별했습니다. 따라서 개별 파일에 저장소 라이선스와 다른
+라이선스 머리글이 있을 수 있습니다. 1.0.0 릴리스를 검사한 결과 4,617개 파일 중 약 80개(2% 미만)에서 GPL 계열(GPL, LGPL, AGPL)
+라이선스 문구가 확인되었습니다([DATASHEET.md](DATASHEET.md#bias-risks-and-limitations) 참조).
+**파일 머리글에 라이선스가 명시된 경우 해당 머리글이 그 파일에 적용됩니다.** `entireCode`를 재사용·재배포하기 전에 머리글을
+확인하시기 바랍니다. 해당 레코드는 다음 릴리스에서 제거할 예정이며, 그때까지는 각 파일 머리글의 라이선스를 따라 주시기 바랍니다.
 
 ## 데이터 출처
 

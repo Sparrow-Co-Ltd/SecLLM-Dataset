@@ -46,7 +46,7 @@ Numbers refer to release 1.0.0 (`data/java/input.jsonl`) and can be recomputed w
 - **Patches.** Patches come from remediation suggestions produced in the Sparrow workflow. The generation method
   is not documented in this release. A patch is included only if re-running Sparrow SAST on the patched file
   confirmed that the finding was resolved.
-- **Time frame.** Not documented in this release. The data was first committed to this repository in August 2026; release 1.0.0 is dated 2026-09-19.
+- **Time frame.** Not documented in this release. The data was first committed to this repository in August 2026; release 1.0.0 is dated 2026-09-20.
 
 ## Preprocessing and Labeling
 
@@ -99,9 +99,10 @@ Numbers refer to release 1.0.0 (`data/java/input.jsonl`) and can be recomputed w
 - **Language coverage.** Java only in this release.
 - **Language of annotations.** `contexts[].message` and `issueRisk` values are in Korean; English is available for type names,
   descriptions, and examples.
-- **Upstream licensing.** starcoderdata filtered code by repository-level license. Individual files can still carry their own
-  license headers: a header scan of release 1.0.0 found GPL-family license text in 79 files, 69 of them without any
-  permissive-license mention. Treat the per-file header as authoritative and see [NOTICE.md](NOTICE.md).
+- **Upstream licensing.** starcoderdata filtered code by repository-level license, not by file. Individual files can still
+  carry their own license headers: a keyword scan of release 1.0.0 found GPL-family license text (GPL, LGPL, AGPL) in
+  roughly 80 of the 4,617 files, under 2% (the exact count depends on the matching heuristic). Treat the per-file header
+  as authoritative. These records are scheduled for removal in a future release; see [NOTICE.md](NOTICE.md).
 - **Redaction artifacts.** Upstream PII redaction replaced some identifiers in code and comments with placeholders
   (for example `<PASSWORD>` or `<KEY>`), which can make a file syntactically or semantically different from the original project.
 

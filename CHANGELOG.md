@@ -25,7 +25,12 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - NOTICE: English translation added; file-level license headers in `entireCode` take precedence
   (the upstream corpus filtered by repository-level license); removal requests go through an issue form
 
-## [1.0.0] - 2026-09-19
+### Deprecated
+
+- Records whose `entireCode` carries a GPL-family license header (roughly 80 files, under 2%) are scheduled for
+  removal in a future release. Until then, the license in each file's header governs that file.
+
+## [1.0.0] - 2026-09-20
 
 ### Added
 
