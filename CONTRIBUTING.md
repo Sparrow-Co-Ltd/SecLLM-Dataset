@@ -69,6 +69,12 @@ community data issue; a maintainer will update the allowlist if accepted.
 | Directory | `fileExtension` | `programmingLanguage` |
 |---|---|---|
 | `java` | `.java` | `Java` |
+| `javascript` | `.js` | `JavaScript` |
+| `typescript` | `.ts` | `TypeScript` |
+| `go` | `.go` | `Go` |
+| `python` | `.py` | `Python` |
+| `c` | `.c` | `C` |
+| `cpp` | `.cpp` | `C++` |
 
 Adding a language means adding one entry to `LANGS` in `scripts/validate.py` and a row to this
 table.
