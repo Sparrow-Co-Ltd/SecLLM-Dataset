@@ -276,10 +276,49 @@ def self_test():
         ("community extension mismatch", True, set_(["input", "fileExtension"], ".py")),
     ]
     failures = []
-    for name, community, rec in (("valid core", False, core), ("valid community", True, comm)):
-        errs = check_record(rec, community, "java")
-        if errs:
-            failures.append(f"{name} rejected: {errs}")
+    # Keep expected mappings independent of LANGS so missing or incorrect entries fail.
+    language_cases = [
+        ("java", ".java", "Java"),
+        ("javascript", ".js", "JavaScript"),
+        ("typescript", ".ts", "TypeScript"),
+        ("go", ".go", "Go"),
+        ("python", ".py", "Python"),
+        ("c", ".c", "C"),
+        ("cpp", ".cpp", "C++"),
+    ]
+    valid_records = valid_paths = language_mismatches = 0
+    for lang, ext, language in language_cases:
+        for community, template in ((False, core), (True, comm)):
+            prefix = "community/" if community else ""
+            path = DATA / prefix / lang / "x.jsonl"
+            name = f"{prefix}{lang}"
+            try:
+                actual_tier = tier_of(path)
+            except ValueError as e:
+                failures.append(f"valid path rejected: {name}: {e}")
+                continue
+            if actual_tier != (community, lang):
+                failures.append(f"valid path misclassified: {name}: {actual_tier}")
+            valid_paths += 1
+            # Only metadata is varied: the validator does not parse source syntax.
+            rec = copy.deepcopy(template)
+            rec["input"].update(fileExtension=ext, programmingLanguage=language)
+            if community:
+                rec["meta"].update(sourcePath=f"src/A{ext}", ruleId=f"{lang}.example")
+            errs = check_record(rec, community, lang)
+            if errs:
+                failures.append(f"valid {name} record rejected: {errs}")
+            valid_records += 1
+            for field, wrong in (
+                ("fileExtension", ".py" if lang == "java" else ".java"),
+                ("programmingLanguage", "Python" if lang == "java" else "Java"),
+            ):
+                bad_rec = copy.deepcopy(rec)
+                bad_rec["input"][field] = wrong
+                errs = check_record(bad_rec, community, lang)
+                if not any(e.startswith("input: fileExtension/programmingLanguage") for e in errs):
+                    failures.append(f"language mismatch not detected: {name}: {field}")
+                language_mismatches += 1
     for name, community, mutate in cases:
         rec = copy.deepcopy(comm if community else core)
         mutate(rec)
@@ -291,12 +330,11 @@ def self_test():
             failures.append(f"path not rejected: data/{bad}")
         except ValueError:
             pass
-    if tier_of(DATA / "community/java/x.jsonl") != (True, "java") or tier_of(DATA / "java/x.jsonl") != (False, "java"):
-        failures.append("valid paths misclassified")
     if failures:
         print("self-test FAILED:\n  " + "\n  ".join(failures))
         return 1
-    print(f"self-test OK: 2 valid records accepted, {len(cases)} broken records and 3 bad paths rejected")
+    print(f"self-test OK: {valid_records} valid records and {valid_paths} valid paths accepted, "
+          f"{len(cases) + language_mismatches} broken records and 3 bad paths rejected")
     return 0
 
 
