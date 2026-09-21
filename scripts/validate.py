@@ -23,7 +23,15 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
 # Language directory -> (fileExtension, programmingLanguage). Add one line per new language.
-LANGS = {"java": (".java", "Java")}
+LANGS = {
+    "java": (".java", "Java"),
+    "javascript": (".js", "JavaScript"),
+    "typescript": (".ts", "TypeScript"),
+    "go": (".go", "Go"),
+    "python": (".py", "Python"),
+    "c": (".c", "C"),
+    "cpp": (".cpp", "C++"),
+}
 RISKS = {"매우 높음", "높음", "보통", "낮음", "매우 낮음"}
 EVENTS = {"source", "branch", "sink"}
 LICENSES = {"MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD",
