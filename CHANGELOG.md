@@ -18,6 +18,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Project policies: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE, MAINTAINERS
 - Datasheet (`DATASHEET.md`), English README with Korean translation (`README.ko.md`), `CITATION.cff`
 - Validator (`scripts/validate.py`) and CI workflows
+- Validator support for JavaScript, TypeScript, Go, Python, C, and C++ datasets,
+  in addition to Java
 - Community data track (`data/community/`) for data produced with third-party tools
 
 ### Changed
