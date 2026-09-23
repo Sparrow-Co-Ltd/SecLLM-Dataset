@@ -15,6 +15,7 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 ### Added
 
+- Go dataset (`data/go/input.jsonl`): 990 records across 22 vulnerability types
 - C++ dataset (`data/cpp/input.jsonl`): 3,887 records across 108 vulnerability types
 - JavaScript dataset (`data/javascript/input.jsonl`): 1,137 records across 37 vulnerability types
   Excludes 3 records flagged by GitHub push protection for credential patterns.
