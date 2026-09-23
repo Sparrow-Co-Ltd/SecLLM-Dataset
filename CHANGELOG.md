@@ -15,6 +15,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 ### Added
 
+- TypeScript dataset (`data/typescript/input.jsonl`): 527 records across 15 vulnerability types
+  Excludes 1 records flagged by GitHub push protection for credential patterns.
 - Python dataset (`data/python/input.jsonl`): 1,387 records across 38 vulnerability types
   Excludes 2 records flagged by GitHub push protection for credential patterns.
 - Go dataset (`data/go/input.jsonl`): 990 records across 22 vulnerability types

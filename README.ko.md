@@ -40,19 +40,21 @@ SecLLM-Dataset/
     │   └── input.jsonl        # Go 취약점 + 패치 990건 (약 8MB)
     ├── python/
     │   └── input.jsonl        # Python 취약점 + 패치 1,387건 (약 15MB)
+    ├── typescript/
+    │   └── input.jsonl        # TypeScript 취약점 + 패치 527건 (약 4.3MB)
     └── community/             # 커뮤니티 트랙: 서드파티 도구로 만든 데이터 (아래 참조)
 ```
 
 파일 형식은 **JSON Lines** 입니다. 한 줄이 하나의 취약점 인스턴스(JSON 객체)에 해당하며,
 각 레코드는 취약점 정보(`input`)와 해당 취약점을 해결하는 패치(`output`)의 쌍으로 구성됩니다.
 
-> 언어별로 디렉터리를 분리하며, Java, JavaScript, C++, Go, Python 데이터를 제공합니다.
+> 언어별로 디렉터리를 분리하며, Java, JavaScript, C++, Go, Python, TypeScript 데이터를 제공합니다.
 
 ## 데이터 등급
 
 | 등급 | 경로 | 생성 주체 | 검증 |
 | --- | --- | --- | --- |
-| 코어 | `data/java/`, `data/javascript/`, `data/cpp/`, `data/go/`, `data/python/` | Sparrow SAST 탐지·주석 | 메인테이너가 Sparrow SAST로 패치를 재검증 |
+| 코어 | `data/java/`, `data/javascript/`, `data/cpp/`, `data/go/`, `data/python/`, `data/typescript/` | Sparrow SAST 탐지·주석 | 메인테이너가 Sparrow SAST로 패치를 재검증 |
 | 커뮤니티 | `data/community/<언어>/` | 커뮤니티가 서드파티 도구(Semgrep, CodeQL 등)로 생성해 기여 | 기여자가 보증. CI는 스키마와 출처 정보만 검사 |
 
 커뮤니티 레코드는 같은 `input`/`output` 스키마에 출처(도구, 규칙, 원본 저장소, 라이선스)를 담은
@@ -68,6 +70,7 @@ SecLLM-Dataset/
 | --- | --- | --- | --- |
 | `data/java/input.jsonl` | 4,617 | input + output | 약 54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | 약 11 MB (11,520,239 bytes) |
+| `data/typescript/input.jsonl` | 527 | input + output | 약 4.3 MB (4,466,197 bytes) |
 | `data/python/input.jsonl` | 1,387 | input + output | 약 15 MB (16,164,883 bytes) |
 | `data/go/input.jsonl` | 990 | input + output | 약 8 MB (8,484,125 bytes) |
 | `data/cpp/input.jsonl` | 3,887 | input + output | 약 38 MB (40,096,971 bytes) |
@@ -137,6 +140,20 @@ SecLLM-Dataset/
 | 코드 길이(라인) | 최소 9 / 중앙값 113 / 최대 2,802 |
 
 `python scripts/validate.py --stats data/python/input.jsonl` 로 다시 계산할 수 있습니다.
+
+---
+
+### TypeScript (`data/typescript/input.jsonl` 기준)
+
+| 항목 | 값 |
+| --- | --- |
+| 레코드 수 | 527 |
+| 언어 | TypeScript (`.ts`) |
+| 고유 취약점 유형 | 15종 |
+| 파일 크기 | 약 4.3 MB (4,466,197 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 88 / 최대 2,977 |
+
+`python scripts/validate.py --stats data/typescript/input.jsonl` 로 다시 계산할 수 있습니다.
 
 ---
 
