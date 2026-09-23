@@ -32,19 +32,21 @@ SecLLM-Dataset/
 └── data/
     ├── java/
     │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,617 records (~54 MB)
+    ├── javascript/
+    │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
     └── community/             # Community track: data from third-party tools (see below)
 ```
 
 Files are **JSON Lines**: one line is one vulnerability instance (a JSON object).
 Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
-> Data is split by language. Languages other than Java will be added.
+> Data is split by language. Java and JavaScript datasets are available.
 
 ## Data tiers
 
 | Tier | Path | Produced by | Verification |
 | --- | --- | --- | --- |
-| Core | `data/java/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
+| Core | `data/java/`, `data/javascript/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
 | Community | `data/community/<lang>/` | Third-party tools (e.g. Semgrep, CodeQL), contributed by the community | Attested by the contributor; CI checks schema and provenance only |
 
 Community records use the same `input`/`output` schema plus a required `meta` object with provenance
@@ -59,8 +61,9 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 | File | Records | Format | Size |
 | --- | --- | --- | --- |
 | `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
+| `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
 
-### Overall (`data/java/input.jsonl`)
+### Java (`data/java/input.jsonl`)
 
 | Item | Value |
 | --- | --- |
@@ -71,6 +74,18 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 | Code length (lines) | min 9 / median 117 / max 2,998 |
 
 Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
+
+### JavaScript (`data/javascript/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 1,137 |
+| Language | JavaScript (`.js`) |
+| Unique vulnerability types | 37 |
+| File size | ~11 MB (11,520,239 bytes) |
+| Code length (lines) | min 9 / median 93 / max 2,772 |
+
+Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
 
 ---
 

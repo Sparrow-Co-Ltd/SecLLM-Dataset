@@ -15,6 +15,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 ### Added
 
+- JavaScript dataset (`data/javascript/input.jsonl`): 1,137 records across 37 vulnerability types
+  Excludes 3 records flagged by GitHub push protection for credential patterns.
 - Project policies: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE, MAINTAINERS
 - Datasheet (`DATASHEET.md`), English README with Korean translation (`README.ko.md`), `CITATION.cff`
 - Validator (`scripts/validate.py`) and CI workflows
