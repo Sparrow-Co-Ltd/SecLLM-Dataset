@@ -34,19 +34,21 @@ SecLLM-Dataset/
     │   └── input.jsonl        # Java 취약점 + 해결 확인된 패치 4,617건 (약 54MB)
     ├── javascript/
     │   └── input.jsonl        # JavaScript 취약점 + 패치 1,137건 (약 11MB)
+    ├── cpp/
+    │   └── input.jsonl        # C++ 취약점 + 패치 3,887건 (약 38MB)
     └── community/             # 커뮤니티 트랙: 서드파티 도구로 만든 데이터 (아래 참조)
 ```
 
 파일 형식은 **JSON Lines** 입니다. 한 줄이 하나의 취약점 인스턴스(JSON 객체)에 해당하며,
 각 레코드는 취약점 정보(`input`)와 해당 취약점을 해결하는 패치(`output`)의 쌍으로 구성됩니다.
 
-> 언어별로 디렉터리를 분리하며, Java와 JavaScript 데이터를 제공합니다.
+> 언어별로 디렉터리를 분리하며, Java, JavaScript, C++ 데이터를 제공합니다.
 
 ## 데이터 등급
 
 | 등급 | 경로 | 생성 주체 | 검증 |
 | --- | --- | --- | --- |
-| 코어 | `data/java/`, `data/javascript/` | Sparrow SAST 탐지·주석 | 메인테이너가 Sparrow SAST로 패치를 재검증 |
+| 코어 | `data/java/`, `data/javascript/`, `data/cpp/` | Sparrow SAST 탐지·주석 | 메인테이너가 Sparrow SAST로 패치를 재검증 |
 | 커뮤니티 | `data/community/<언어>/` | 커뮤니티가 서드파티 도구(Semgrep, CodeQL 등)로 생성해 기여 | 기여자가 보증. CI는 스키마와 출처 정보만 검사 |
 
 커뮤니티 레코드는 같은 `input`/`output` 스키마에 출처(도구, 규칙, 원본 저장소, 라이선스)를 담은
@@ -62,6 +64,7 @@ SecLLM-Dataset/
 | --- | --- | --- | --- |
 | `data/java/input.jsonl` | 4,617 | input + output | 약 54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | 약 11 MB (11,520,239 bytes) |
+| `data/cpp/input.jsonl` | 3,887 | input + output | 약 38 MB (40,096,971 bytes) |
 
 ### Java (`data/java/input.jsonl` 기준)
 
@@ -86,6 +89,20 @@ SecLLM-Dataset/
 | 코드 길이(라인) | 최소 9 / 중앙값 93 / 최대 2,772 |
 
 `python scripts/validate.py --stats data/javascript/input.jsonl` 로 다시 계산할 수 있습니다.
+
+---
+
+### C++ (`data/cpp/input.jsonl` 기준)
+
+| 항목 | 값 |
+| --- | --- |
+| 레코드 수 | 3,887 |
+| 언어 | C++ (`.cpp`) |
+| 고유 취약점 유형 | 108종 |
+| 파일 크기 | 약 38 MB (40,096,971 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 95 / 최대 2,992 |
+
+`python scripts/validate.py --stats data/cpp/input.jsonl` 로 다시 계산할 수 있습니다.
 
 ---
 

@@ -34,19 +34,21 @@ SecLLM-Dataset/
     │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,617 records (~54 MB)
     ├── javascript/
     │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
+    ├── cpp/
+    │   └── input.jsonl        # C++ vulnerabilities + patches, 3,887 records (~38 MB)
     └── community/             # Community track: data from third-party tools (see below)
 ```
 
 Files are **JSON Lines**: one line is one vulnerability instance (a JSON object).
 Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
-> Data is split by language. Java and JavaScript datasets are available.
+> Data is split by language. Java, JavaScript and C++ datasets are available.
 
 ## Data tiers
 
 | Tier | Path | Produced by | Verification |
 | --- | --- | --- | --- |
-| Core | `data/java/`, `data/javascript/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
+| Core | `data/java/`, `data/javascript/`, `data/cpp/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
 | Community | `data/community/<lang>/` | Third-party tools (e.g. Semgrep, CodeQL), contributed by the community | Attested by the contributor; CI checks schema and provenance only |
 
 Community records use the same `input`/`output` schema plus a required `meta` object with provenance
@@ -62,6 +64,7 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 | --- | --- | --- | --- |
 | `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
+| `data/cpp/input.jsonl` | 3,887 | input + output | ~38 MB (40,096,971 bytes) |
 
 ### Java (`data/java/input.jsonl`)
 
@@ -86,6 +89,20 @@ Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
 | Code length (lines) | min 9 / median 93 / max 2,772 |
 
 Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
+
+---
+
+### C++ (`data/cpp/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 3,887 |
+| Language | C++ (`.cpp`) |
+| Unique vulnerability types | 108 |
+| File size | ~38 MB (40,096,971 bytes) |
+| Code length (lines) | min 9 / median 95 / max 2,992 |
+
+Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
 
 ---
 
