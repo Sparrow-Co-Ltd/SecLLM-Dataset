@@ -1,0 +1,27 @@
+name: Community event
+description: Propose a meetup, office hours, or contribution day.
+title: "[event] "
+labels: ["community", "event"]
+body:
+  - type: input
+    id: goal
+    attributes:
+      label: Purpose of the event
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Proposed date, time, and time zone
+    validations:
+      required: true
+  - type: textarea
+    id: agenda
+    attributes:
+      label: Agenda and expected outcome
+    validations:
+      required: true
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Accessibility, recording, and privacy plan
