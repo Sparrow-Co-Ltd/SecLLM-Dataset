@@ -1,0 +1,37 @@
+name: Community discussion to issue
+description: Track a technical item found in Discord, a Discussion, or a Hugging Face Community thread.
+title: "[community] "
+labels: ["community", "triage"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Original discussion link
+      placeholder: A shareable message, Discussion, or Hugging Face thread URL
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Problem and expected result
+      description: Summarize without personal data or secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce and environment
+      description: Include the data file and record line, or the Hugging Face revision, if relevant.
+  - type: textarea
+    id: decision
+    attributes:
+      label: Agreed next step and owner
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public disclosure check
+      options:
+        - label: This issue contains no undisclosed vulnerability, credential, or personal data.
+          required: true

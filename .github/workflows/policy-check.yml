@@ -1,0 +1,68 @@
+name: policy-check
+
+# Same triggers as validate.yml and no paths filter, so both jobs report on every PR and can
+# become required checks.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  governance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Required files, headings, and leftover template text
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in GOVERNANCE.md MAINTAINERS.md .github/CODEOWNERS CODE_OF_CONDUCT.md SECURITY.md; do
+            test -s "$f" || { echo "::error::missing or empty $f"; exit 1; }
+          done
+          for h in "Purpose and Scope" "Roles and Responsibilities" "Consensus and Voting" \
+                   "Granting Roles" "Inactivity, Resignation, and Removal" \
+                   "Disputes and Escalation" "Amendments and Periodic Review"; do
+            grep -Fq "$h" GOVERNANCE.md || { echo "::error file=GOVERNANCE.md::missing heading: $h"; exit 1; }
+          done
+          # ponytail: [O] keeps this file free of the literal word it searches for.
+          if grep -nE '\[프로젝트명\]|@ORG/|TOD[O]' GOVERNANCE.md MAINTAINERS.md .github/CODEOWNERS; then
+            echo "::error::template text remains in GOVERNANCE.md, MAINTAINERS.md or .github/CODEOWNERS"
+            exit 1
+          fi
+          # Unfilled placeholders are allowed on drafts; surface them as warnings.
+          { git grep -n '\[TB[D]' -- . || true; } | while IFS=: read -r file line _; do
+            echo "::warning file=$file,line=$line::unfilled placeholder"
+          done
+
+  community-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Required files, README links, fallback channel, and channel scopes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in README.md LICENSE CONTRIBUTING.md CODE_OF_CONDUCT.md SECURITY.md COMMUNITY.md \
+                   docs/community/CHANNEL_MATRIX.md docs/community/CHANNEL_POLICY.md \
+                   docs/community/MODERATOR_RUNBOOK.md docs/community/HUGGINGFACE_COMMUNITY.md \
+                   docs/community/DISCORD_LAUNCH.md; do
+            test -s "$f" || { echo "::error::missing or empty $f"; exit 1; }
+          done
+          for r in README.md README.ko.md; do
+            grep -Fq "COMMUNITY.md" "$r" || { echo "::error file=$r::no link to COMMUNITY.md"; exit 1; }
+          done
+          grep -Fq "Announcements" COMMUNITY.md || { echo "::error file=COMMUNITY.md::no Announcements fallback channel"; exit 1; }
+          covers=$(grep -c '\*\*Covers:\*\*' COMMUNITY.md || true)
+          excludes=$(grep -c '\*\*Does not cover:\*\*' COMMUNITY.md || true)
+          if [ "$covers" -eq 0 ] || [ "$covers" -ne "$excludes" ]; then
+            echo "::error file=COMMUNITY.md::Covers ($covers) and Does not cover ($excludes) lines must be present and equal"
+            exit 1
+          fi
