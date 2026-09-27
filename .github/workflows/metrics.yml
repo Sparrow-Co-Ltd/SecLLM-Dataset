@@ -1,0 +1,50 @@
+name: metrics
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"  # Mondays 00:00 UTC
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths: [scripts/collect_metrics.py, .github/workflows/metrics.yml]
+
+permissions:
+  contents: read
+
+# No top-level concurrency: a shared group would let a PR `test` run displace a queued publish.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # ponytail: stdlib-only script on the runner's python3, same as validate.yml.
+      - run: python3 -W error scripts/collect_metrics.py --self-test
+      - run: python3 scripts/collect_metrics.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  publish:
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # only to append metrics/github-kpi.csv on the `metrics` branch
+      issues: read
+      pull-requests: read
+    concurrency:
+      group: metrics-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 scripts/collect_metrics.py --publish metrics
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
