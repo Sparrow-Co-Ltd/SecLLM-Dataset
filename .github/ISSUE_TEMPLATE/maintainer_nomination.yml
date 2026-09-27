@@ -1,0 +1,49 @@
+name: Maintainer nomination
+description: Nominate someone for the Reviewer, Maintainer, or Project Lead role (see GOVERNANCE.md, Granting Roles).
+title: "[nomination] "
+labels: ["governance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A Maintainer nomination needs endorsements from 2 people who hold the Maintainer or Project Lead role, followed by a 7-day objection window. Endorse or object in the comments.
+  - type: input
+    id: nominee
+    attributes:
+      label: Nominee's GitHub ID
+      placeholder: "@username"
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Proposed role
+      options:
+        - Reviewer
+        - Maintainer
+        - Project Lead
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Contributions and trust
+      description: Links to pull requests, reviews, data error reports, documentation, or community support.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Areas of responsibility
+      description: For example core data re-verification, validator, community data, documentation, community channels.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: The nominee agrees to this public nomination and to take on the role.
+          required: true
+        - label: Known conflicts of interest are disclosed above (or there are none).
+          required: true

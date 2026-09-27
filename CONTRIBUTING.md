@@ -3,6 +3,9 @@
 Thank you for helping improve SecLLM-Dataset. By participating you agree to follow our
 [Code of Conduct](CODE_OF_CONDUCT.md).
 
+For where to ask questions or report things outside a pull request, see [COMMUNITY.md](COMMUNITY.md);
+past governance decisions are recorded in [docs/decisions/](docs/decisions/).
+
 ## Ways to Contribute
 
 | What you want to do | Channel |
@@ -19,7 +22,7 @@ The core dataset (`data/java/`) is produced with Sparrow SAST, and every patch i
 running the analyzer again. Outside contributors cannot reproduce that verification, so pull
 requests that modify core data are not accepted. Instead, open a data error issue. The team
 re-verifies the report and ships the correction in the next release (see
-[GOVERNANCE.md](GOVERNANCE.md#releases)).
+[GOVERNANCE.md](GOVERNANCE.md#12-releases)).
 
 ## Community Data
 

@@ -1,2 +1,10 @@
-# Maintainers are listed in MAINTAINERS.md.
-* @moosunny @Sparrow-Co-Ltd
+# Owners are the accounts listed in MAINTAINERS.md. Paths are listed explicitly so that one area can
+# get a different owner later by changing a single line.
+*                      @moosunny @Sparrow-Co-Ltd
+/GOVERNANCE.md         @moosunny @Sparrow-Co-Ltd
+/MAINTAINERS.md        @moosunny @Sparrow-Co-Ltd
+/.github/              @moosunny @Sparrow-Co-Ltd
+/SECURITY.md           @moosunny @Sparrow-Co-Ltd
+/data/java/            @moosunny @Sparrow-Co-Ltd
+/scripts/              @moosunny @Sparrow-Co-Ltd
+/docs/decisions/       @moosunny @Sparrow-Co-Ltd
