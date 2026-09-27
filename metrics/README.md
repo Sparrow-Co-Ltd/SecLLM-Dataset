@@ -48,8 +48,8 @@ Source: GitHub REST API (`/repos/{repo}`, `/issues?state=all`, issue comments, P
 |---|---|---|---|
 | `new_members` | New members of the chat community in the month | Chat platform admin view | Manual |
 | `active_chatters` | People who posted in the chat community in the month | Chat platform admin view | Manual |
-| `first_time_contributors` | People whose first contribution (PR, docs, triage) falls in the month | `github-kpi.csv` for PRs; docs/triage by hand | Partly |
-| `repeat_contributors` | People who contributed in 2 or more distinct periods | `github-kpi.csv` for PRs | Partly |
+| `first_time_contributors` | People whose first contribution (PR, docs, triage) falls in the month | `collect_metrics.py --days` recomputed to cover the month, for PRs; docs/triage by hand | Partly |
+| `repeat_contributors` | Human PR authors active in the month whose PRs span 2 or more calendar months | `collect_metrics.py --days` recomputed to cover the month | Partly |
 | `questions_received` | Questions opened in the month on any channel | Discussions Q&A, issues, chat, Hugging Face | Manual |
 | `questions_answered` | Questions answered or closed in the month; closing without an answer does not count | Same as above | Manual |
 | `median_first_human_response_hours` | Median time from a question to the first non-bot, non-author response; report business-hours and weekend cases separately | `github-kpi.csv` for GitHub; other channels by hand | Partly |

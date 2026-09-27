@@ -72,7 +72,7 @@ def build_row(repo, items, responses, now, days):
                needed only for items created inside the window
     """
     start = now - timedelta(days=days)
-    in_win = lambda t: t is not None and start <= t <= now  # noqa: E731
+    in_win = lambda t: t is not None and start <= t < now  # noqa: E731
     issues = [i for i in items if "pull_request" not in i]
     prs = [i for i in items if "pull_request" in i]
 
@@ -176,7 +176,7 @@ def self_test():
     items = [
         # issue in window: bot at +1h, author self-reply at +2h, human at +10h -> 10h
         {"number": 1, "user": human("alice"), "created_at": "2026-09-25T00:00:00Z", "closed_at": None},
-        # issue in window, closed in window: [bot]-suffixed login at +1h, human at +4h -> 4h
+        # issue in window, closed in window: [bot]-suffixed login at +1h, human at +8h -> 8h
         {"number": 2, "user": human("bob"), "created_at": "2026-09-26T00:00:00Z",
          "closed_at": "2026-09-27T00:00:00Z"},
         # PR in window, merged: review by a human at +6h -> 6h. carol's first PR ever -> first-time
@@ -199,7 +199,7 @@ def self_test():
         1: [{"user": bot, "at": "2026-09-25T01:00:00Z"}, {"user": human("alice"), "at": "2026-09-25T02:00:00Z"},
             {"user": human("maint"), "at": "2026-09-25T10:00:00Z"}],
         2: [{"user": {"login": "helper[bot]", "type": "User"}, "at": "2026-09-26T01:00:00Z"},
-            {"user": human("maint"), "at": "2026-09-26T04:00:00Z"}],
+            {"user": human("maint"), "at": "2026-09-26T08:00:00Z"}],
         3: [{"user": human("maint"), "at": "2026-09-22T06:00:00Z"}, {"user": human("maint"), "at": None}],
         4: [{"user": human("dave"), "at": "2026-09-27T01:00:00Z"}],  # self-reply only -> no response
         7: [{"user": bot, "at": "2026-09-26T00:01:00Z"}],
@@ -207,7 +207,7 @@ def self_test():
     row = build_row(repo, items, responses, now, 7)
     expected = {"date": "2026-09-28", "window_days": 7, "stars": 5, "forks": 2, "watchers": 3, "open_issues": 4,
                 "issues_opened": 2, "issues_closed": 2, "prs_opened": 3, "prs_merged": 1,
-                "median_first_human_response_hours": 6.0,
+                "median_first_human_response_hours": 8.0,
                 "first_time_contributors": 1, "repeat_contributors": 1}
     failures = [f"{k}: expected {v!r}, got {row[k]!r}" for k, v in expected.items() if row[k] != v]
     if build_row(repo, items, {1: responses[1][:2]}, now, 7)["median_first_human_response_hours"] != "":
@@ -243,7 +243,8 @@ def main():
     if args.publish and not token:
         print("--publish needs GITHUB_TOKEN")
         return 1
-    row = collect(args.repo, args.days, token, datetime.now(timezone.utc))
+    now = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    row = collect(args.repo, args.days, token, now)
     line = csv_text(row, header=False).strip()
     if args.out:
         append_file(args.out, row)

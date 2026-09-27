@@ -16,6 +16,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       issues: read
@@ -26,14 +27,16 @@ jobs:
           persist-credentials: false
       # ponytail: stdlib-only script on the runner's python3, same as validate.yml.
       - run: python3 -W error scripts/collect_metrics.py --self-test
-      - run: python3 scripts/collect_metrics.py
+      - if: github.event_name == 'pull_request'
+        run: python3 scripts/collect_metrics.py
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
   publish:
     needs: test
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write  # only to append metrics/github-kpi.csv on the `metrics` branch
       issues: read
