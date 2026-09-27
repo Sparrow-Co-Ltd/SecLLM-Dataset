@@ -1,0 +1,59 @@
+name: OSS evaluation
+description: Request an evaluation before adopting an external component (dataset, tool, GitHub Action) or before a release.
+title: "[evaluation] "
+labels: ["evaluation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Evaluations follow docs/evaluation/POLICY.md and use the 7-area scoring of the intake or release-readiness record. Completed records are added under docs/evaluation/ by pull request.
+  - type: dropdown
+    id: gate
+    attributes:
+      label: Gate
+      options:
+        - Intake of an external component
+        - Release of this dataset
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target and exact version, commit, or revision
+      placeholder: "owner/repo@<40-char SHA> (vX.Y.Z)"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official URL
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: How it is used, combined, distributed, or released
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Scores and evidence links
+      description: Fatal conditions, 7-area scores, and at least two candidates compared.
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: Proposed decision
+      options:
+        - Approve
+        - Approve with conditions
+        - Proof of concept or preview only
+        - Reject or postpone
+    validations:
+      required: true
+  - type: textarea
+    id: conditions
+    attributes:
+      label: Conditions, owner, due date, and re-evaluation triggers
