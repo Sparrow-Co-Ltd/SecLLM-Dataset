@@ -252,11 +252,18 @@ data errors, sending documentation or script improvements, or contributing third
 - [GOVERNANCE.md](GOVERNANCE.md): how decisions are made
 - [CHANGELOG.md](CHANGELOG.md): release history
 
-## Getting help
+## Community
 
-- Questions and data errors: [GitHub Issues](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues)
-- Security issues: follow [SECURITY.md](SECURITY.md) (do not open a public issue)
+See [COMMUNITY.md](COMMUNITY.md) for the full guide to every channel.
+
+- Usage questions: [Discussions Q&A](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/discussions/categories/q-a)
+- Data errors (wrong label, false positive, wrong trace, bad patch): [data error form](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=data-error.yml)
+- Security vulnerabilities: follow [SECURITY.md](SECURITY.md) (do not open a public issue)
 - Removal requests from rights holders: [removal request form](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml)
+- Hugging Face questions: see [Hugging Face in COMMUNITY.md](COMMUNITY.md#hugging-face)
+- First triage within 2 business days (Monday-Friday, KST). Answers are best effort, not a support contract.
+
+> GitHub is the source of record for data, bugs, and decisions; the Hugging Face Community tab covers questions about a specific Hugging Face revision; Discord is for chat only and never makes decisions; vulnerabilities and personal data are never posted publicly on any of them.
 
 ## License
 

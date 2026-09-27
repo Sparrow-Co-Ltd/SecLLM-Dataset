@@ -1,6 +1,13 @@
 # Blank issues stay enabled for questions and for asking a maintainer to reach out privately.
 blank_issues_enabled: true
 contact_links:
+  - name: Ask a usage question
+    url: https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/discussions/categories/q-a
+    about: Discussions Q&A for questions about using or loading the dataset.
+  - name: Community channel guide
+    url: https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/blob/main/COMMUNITY.md
+    about: Where to go for data errors, ideas, security reports, removal requests, Hugging Face, and Discord.
   - name: Report a security vulnerability
     url: https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/security/advisories/new
     about: Private report for issues in scripts, workflows, or secrets/personal data in the dataset. Vulnerabilities inside entireCode samples are intentional, not security reports.
+# [TBD: add Discord and HF contact_links when URLs exist]

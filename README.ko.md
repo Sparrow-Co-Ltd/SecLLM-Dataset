@@ -254,11 +254,18 @@ python scripts/validate.py --stats data/java/input.jsonl   # 통계 출력
 - [GOVERNANCE.md](GOVERNANCE.md): 의사결정 방식
 - [CHANGELOG.md](CHANGELOG.md): 릴리스 이력
 
-## 도움 받기
+## 커뮤니티
 
-- 질문과 데이터 오류: [GitHub Issues](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues)
-- 보안 문제: [SECURITY.md](SECURITY.md)의 절차를 따라 주세요 (공개 이슈로 올리지 마세요)
+모든 채널에 대한 전체 안내는 [COMMUNITY.md](COMMUNITY.md)(영문)를 참고하세요.
+
+- 사용 방법 질문: [Discussions Q&A](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/discussions/categories/q-a)
+- 데이터 오류(잘못된 라벨, 오탐, 잘못된 추적 경로, 잘못된 패치): [데이터 오류 신고 양식](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=data-error.yml)
+- 보안 취약점: [SECURITY.md](SECURITY.md)의 절차를 따라 주세요 (공개 이슈로 올리지 마세요)
 - 권리자의 삭제 요청: [삭제 요청 양식](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml)
+- Hugging Face 관련 질문: [COMMUNITY.md의 Hugging Face 섹션](COMMUNITY.md#hugging-face) 참고
+- 첫 응대는 영업일 기준 2일 이내입니다 (월~금, 한국 표준시). 답변은 최선을 다해 제공하며, 보장된 지원 계약은 아닙니다.
+
+> GitHub은 데이터·버그·의사결정의 공식 기록소이며, Hugging Face Community 탭은 특정 Hugging Face 리비전에 대한 질문을 다루고, Discord는 채팅 전용으로 의사결정을 하지 않으며, 취약점과 개인정보는 어떤 채널에도 공개적으로 게시되지 않습니다.
 
 ## 라이선스
 

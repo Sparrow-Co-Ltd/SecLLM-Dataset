@@ -33,7 +33,12 @@ Community leaders have the right and responsibility to remove, edit, or reject c
 
 ## Scope
 
-This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public spaces. Examples of representing our community include using an official e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
+This Code of Conduct applies within all community spaces, including this repository (issues, pull
+requests, and Discussions), the project's Discord server, and the Hugging Face dataset and model
+repositories and their Community tabs. It also applies when an individual is officially
+representing the community in public spaces. Examples of representing our community include using
+an official e-mail address, posting via an official social media account, or acting as an appointed
+representative at an online or offline event.
 
 ## Enforcement
 
@@ -47,6 +52,9 @@ This project uses GitHub-only contact channels, and GitHub does not offer privat
 
 1. **Request a private conversation.** Open a new issue titled `Code of Conduct: request for private contact` and mention a maintainer from [MAINTAINERS.md](MAINTAINERS.md). Do not include any details of the incident in the issue. A maintainer will reply and arrange a private channel with you. If your report concerns a maintainer, mention a different maintainer.
 2. **Report content to GitHub.** For content that violates GitHub's Acceptable Use Policies, use GitHub's built-in "Report content" option on the comment, issue, or pull request, or report the account via [GitHub's abuse reporting](https://docs.github.com/en/communities/maintaining-your-safety-on-github/reporting-abuse-or-spam). These reports go to GitHub, not to the maintainers.
+3. **Private conduct reporting contact.** [TBD: private conduct reporting address or form]. This is
+   the single source for a direct private contact; other project documents link to this section
+   instead of repeating it.
 
 ## Enforcement Guidelines
 
