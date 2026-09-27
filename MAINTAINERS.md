@@ -7,13 +7,13 @@ link the related issue or pull request.
 
 | Name | GitHub | Role | Repo permission | Areas | Appointed | Status |
 |---|---|---|---|---|---|---|
-| MuSun Choi | [@moosunny](https://github.com/moosunny) | Maintainer | `write` | Dataset content, SAST re-verification, validator, releases | 2026-09-21 | Active |
+| moosunny | [@moosunny](https://github.com/moosunny) | Maintainer | `write` | Dataset content, SAST re-verification, validator, releases | 2026-09-21 | Active |
 | Sparrow Co., Ltd. (company owner account, not counted as a person) | [@Sparrow-Co-Ltd](https://github.com/Sparrow-Co-Ltd) | Repository owner | `admin` (repo owner) | Merges to `main`, tags, repository settings | 2026-09-21 | Active |
 | [TBD: second maintainer name and GitHub ID] | | Maintainer | `write` | | | Open |
 | [TBD: Project Lead] | | Project Lead | | Scope, releases, deadlocks | | Open |
 | [TBD: Community Moderator] | | Community Moderator | | Community channels | | Open |
 
-The repository is owned by a personal account, so a Maintainer holds the `write` role and approves
+The repository is owned by the user-type GitHub account `@Sparrow-Co-Ltd` (not an organization), so a Maintainer holds the `write` role and approves
 pull requests, and the owner account `@Sparrow-Co-Ltd` performs the merge. Maintainers are also the
 community leaders who enforce the [Code of Conduct](CODE_OF_CONDUCT.md). To report a conduct
 concern, follow [How to report](CODE_OF_CONDUCT.md#how-to-report).

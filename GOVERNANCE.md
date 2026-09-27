@@ -94,6 +94,13 @@ Current role holders and their repository permissions are listed in [MAINTAINERS
   retroactively.
 - Each decision links to the pull requests and releases that carry it out.
 
+### Exceptions
+
+- Any departure from this document or from the policies it links (for example the license allow
+  list in `docs/evaluation/POLICY.md`) needs written approval from the Project Lead, an expiry date,
+  and an entry in the log below. Expired exceptions are closed or renewed in the quarterly review.
+- Exception log: none as of 2026-09-28.
+
 ## 7. Granting Roles
 
 - Reviewer candidates show sustained contributions and reliable reviews over the last 6 months.
