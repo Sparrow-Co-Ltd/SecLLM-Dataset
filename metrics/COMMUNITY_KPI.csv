@@ -1,0 +1,2 @@
+month,new_members,active_chatters,first_time_contributors,repeat_contributors,questions_received,questions_answered,median_first_human_response_hours,chat_to_github_conversions,issues_opened,prs_opened,prs_merged,moderation_incidents,moderator_hours,notes
+2026-09,,,1,0,,,5.5,,0,1,1,,,baseline; source = first collect_metrics run 2026-09-27; blank = not measured
