@@ -30,6 +30,9 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Validator support for JavaScript, TypeScript, Go, Python, C, and C++ datasets,
   in addition to Java
 - Community data track (`data/community/`) for data produced with third-party tools
+- Test inputs (`data/test/<lang>.jsonl`): 1,231 records in 7 files (Java 315, Python 149, C 210, C++ 287,
+  JavaScript 120, Go 75, TypeScript 75). Same `input` schema as core records; `output` is always `[]`
+- Validator support for `data/test/<lang>.jsonl` (`output` must be `[]`) and matching `--self-test` cases
 
 ### Changed
 

@@ -44,11 +44,15 @@ SecLLM-Dataset/
     │   └── input.jsonl        # Python 취약점 + 패치 1,387건 (약 15MB)
     ├── typescript/
     │   └── input.jsonl        # TypeScript 취약점 + 패치 527건 (약 4.3MB)
+    ├── test/                  # 평가용 test 입력 1,231건 (7개 파일, 패치 없음)
     └── community/             # 커뮤니티 트랙: 서드파티 도구로 만든 데이터 (아래 참조)
 ```
 
 파일 형식은 **JSON Lines** 입니다. 한 줄이 하나의 취약점 인스턴스(JSON 객체)에 해당하며,
 각 레코드는 취약점 정보(`input`)와 해당 취약점을 해결하는 패치(`output`)의 쌍으로 구성됩니다.
+
+`data/test/<언어>.jsonl` 은 평가용 test 입력입니다 (1,231건: Java 315, Python 149, C 210, C++ 287, JavaScript 120, Go 75, TypeScript 75).
+`input` 은 core 레코드와 같지만 검증된 패치는 공개하지 않으므로 `output` 은 항상 `[]` 입니다.
 
 > 언어별로 디렉터리를 분리하며, Java, JavaScript, C, C++, Go, Python, TypeScript 데이터를 제공합니다.
 
@@ -77,6 +81,13 @@ SecLLM-Dataset/
 | `data/go/input.jsonl` | 990 | input + output | 약 8 MB (8,484,125 bytes) |
 | `data/cpp/input.jsonl` | 3,887 | input + output | 약 38 MB (40,096,971 bytes) |
 | `data/c/input.jsonl` | 2,673 | input + output | 약 32 MB (33,438,245 bytes) |
+| `data/test/java.jsonl` | 315 | input only (`output` 은 `[]`) | 2,901,996 bytes |
+| `data/test/python.jsonl` | 149 | input only (`output` 은 `[]`) | 1,548,686 bytes |
+| `data/test/c.jsonl` | 210 | input only (`output` 은 `[]`) | 2,083,727 bytes |
+| `data/test/cpp.jsonl` | 287 | input only (`output` 은 `[]`) | 2,444,046 bytes |
+| `data/test/javascript.jsonl` | 120 | input only (`output` 은 `[]`) | 1,229,428 bytes |
+| `data/test/go.jsonl` | 75 | input only (`output` 은 `[]`) | 1,324,727 bytes |
+| `data/test/typescript.jsonl` | 75 | input only (`output` 은 `[]`) | 659,954 bytes |
 
 ### Java (`data/java/input.jsonl` 기준)
 

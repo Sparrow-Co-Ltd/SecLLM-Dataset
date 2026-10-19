@@ -44,6 +44,7 @@ SecLLM-Dataset/
     │   └── input.jsonl        # Python vulnerabilities + patches, 1,387 records (~15 MB)
     ├── typescript/
     │   └── input.jsonl        # TypeScript vulnerabilities + patches, 527 records (~4.3 MB)
+    ├── test/                  # Test inputs, 1,231 records in 7 files (no patches)
     └── community/             # Community track: data from third-party tools (see below)
 ```
 
@@ -51,6 +52,10 @@ Files are **JSON Lines**: one line is one vulnerability instance (a JSON object)
 Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
 > Data is split by language. Java, JavaScript, C, C++, Go, Python and TypeScript datasets are available.
+
+`data/test/<lang>.jsonl` holds test inputs (1,231 records: Java 315, Python 149, C 210, C++ 287,
+JavaScript 120, Go 75, TypeScript 75). A test record has the same `input` as a core record, but no verified
+patch is published, so `output` is always `[]`.
 
 ## Data tiers
 
@@ -77,6 +82,13 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 | `data/go/input.jsonl` | 990 | input + output | ~8 MB (8,484,125 bytes) |
 | `data/cpp/input.jsonl` | 3,887 | input + output | ~38 MB (40,096,971 bytes) |
 | `data/c/input.jsonl` | 2,673 | input + output | ~32 MB (33,438,245 bytes) |
+| `data/test/java.jsonl` | 315 | input only (`output` is `[]`) | 2,901,996 bytes |
+| `data/test/python.jsonl` | 149 | input only (`output` is `[]`) | 1,548,686 bytes |
+| `data/test/c.jsonl` | 210 | input only (`output` is `[]`) | 2,083,727 bytes |
+| `data/test/cpp.jsonl` | 287 | input only (`output` is `[]`) | 2,444,046 bytes |
+| `data/test/javascript.jsonl` | 120 | input only (`output` is `[]`) | 1,229,428 bytes |
+| `data/test/go.jsonl` | 75 | input only (`output` is `[]`) | 1,324,727 bytes |
+| `data/test/typescript.jsonl` | 75 | input only (`output` is `[]`) | 659,954 bytes |
 
 ### Java (`data/java/input.jsonl`)
 
