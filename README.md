@@ -35,13 +35,13 @@ SecLLM-Dataset/
     ├── javascript/
     │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
     ├── c/
-    │   └── input.jsonl        # C vulnerabilities + patches, 2,673 records (~32 MB)
+    │   └── input.jsonl        # C vulnerabilities + patches, 2,604 records (~31 MB)
     ├── cpp/
-    │   └── input.jsonl        # C++ vulnerabilities + patches, 3,887 records (~38 MB)
+    │   └── input.jsonl        # C++ vulnerabilities + patches, 3,814 records (~38 MB)
     ├── go/
     │   └── input.jsonl        # Go vulnerabilities + patches, 990 records (~8 MB)
     ├── python/
-    │   └── input.jsonl        # Python vulnerabilities + patches, 1,387 records (~15 MB)
+    │   └── input.jsonl        # Python vulnerabilities + patches, 1,356 records (~15 MB)
     ├── typescript/
     │   └── input.jsonl        # TypeScript vulnerabilities + patches, 527 records (~4.3 MB)
     ├── test/                  # Test inputs, 1,231 records in 7 files (no patches)
@@ -56,6 +56,7 @@ Each record pairs vulnerability information (`input`) with a patch that fixes it
 `data/test/<lang>.jsonl` holds test inputs (1,231 records: Java 315, Python 149, C 210, C++ 287,
 JavaScript 120, Go 75, TypeScript 75). A test record has the same `input` as a core record, but no verified
 patch is published, so `output` is always `[]`.
+No test source file appears in the core data: core records sharing an `entireCode` with a test record are removed.
 
 ## Data tiers
 
@@ -78,10 +79,10 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 | `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
 | `data/typescript/input.jsonl` | 527 | input + output | ~4.3 MB (4,466,197 bytes) |
-| `data/python/input.jsonl` | 1,387 | input + output | ~15 MB (16,164,883 bytes) |
+| `data/python/input.jsonl` | 1,356 | input + output | ~15 MB (15,893,717 bytes) |
 | `data/go/input.jsonl` | 990 | input + output | ~8 MB (8,484,125 bytes) |
-| `data/cpp/input.jsonl` | 3,887 | input + output | ~38 MB (40,096,971 bytes) |
-| `data/c/input.jsonl` | 2,673 | input + output | ~32 MB (33,438,245 bytes) |
+| `data/cpp/input.jsonl` | 3,814 | input + output | ~38 MB (39,347,465 bytes) |
+| `data/c/input.jsonl` | 2,604 | input + output | ~31 MB (32,648,099 bytes) |
 | `data/test/java.jsonl` | 315 | input only (`output` is `[]`) | 2,901,996 bytes |
 | `data/test/python.jsonl` | 149 | input only (`output` is `[]`) | 1,548,686 bytes |
 | `data/test/c.jsonl` | 210 | input only (`output` is `[]`) | 2,083,727 bytes |
@@ -120,11 +121,11 @@ Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 3,887 |
+| Records | 3,814 |
 | Language | C++ (`.cpp`) |
 | Unique vulnerability types | 108 |
-| File size | ~38 MB (40,096,971 bytes) |
-| Code length (lines) | min 9 / median 95 / max 2,992 |
+| File size | ~38 MB (39,347,465 bytes) |
+| Code length (lines) | min 9 / median 96 / max 2,992 |
 
 Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
 
@@ -148,11 +149,11 @@ Recompute with `python scripts/validate.py --stats data/go/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 1,387 |
+| Records | 1,356 |
 | Language | Python (`.py`) |
 | Unique vulnerability types | 38 |
-| File size | ~15 MB (16,164,883 bytes) |
-| Code length (lines) | min 9 / median 113 / max 2,802 |
+| File size | ~15 MB (15,893,717 bytes) |
+| Code length (lines) | min 9 / median 114 / max 2,802 |
 
 Recompute with `python scripts/validate.py --stats data/python/input.jsonl`.
 
@@ -176,11 +177,11 @@ Recompute with `python scripts/validate.py --stats data/typescript/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 2,673 |
+| Records | 2,604 |
 | Language | C (`.c`) |
 | Unique vulnerability types | 110 |
-| File size | ~32 MB (33,438,245 bytes) |
-| Code length (lines) | min 9 / median 148 / max 2,996 |
+| File size | ~31 MB (32,648,099 bytes) |
+| Code length (lines) | min 9 / median 149 / max 2,996 |
 
 Recompute with `python scripts/validate.py --stats data/c/input.jsonl`.
 

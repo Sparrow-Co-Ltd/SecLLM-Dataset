@@ -35,13 +35,13 @@ SecLLM-Dataset/
     ├── javascript/
     │   └── input.jsonl        # JavaScript 취약점 + 패치 1,137건 (약 11MB)
     ├── c/
-    │   └── input.jsonl        # C 취약점 + 패치 2,673건 (약 32MB)
+    │   └── input.jsonl        # C 취약점 + 패치 2,604건 (약 31MB)
     ├── cpp/
-    │   └── input.jsonl        # C++ 취약점 + 패치 3,887건 (약 38MB)
+    │   └── input.jsonl        # C++ 취약점 + 패치 3,814건 (약 38MB)
     ├── go/
     │   └── input.jsonl        # Go 취약점 + 패치 990건 (약 8MB)
     ├── python/
-    │   └── input.jsonl        # Python 취약점 + 패치 1,387건 (약 15MB)
+    │   └── input.jsonl        # Python 취약점 + 패치 1,356건 (약 15MB)
     ├── typescript/
     │   └── input.jsonl        # TypeScript 취약점 + 패치 527건 (약 4.3MB)
     ├── test/                  # 평가용 test 입력 1,231건 (7개 파일, 패치 없음)
@@ -53,6 +53,7 @@ SecLLM-Dataset/
 
 `data/test/<언어>.jsonl` 은 평가용 test 입력입니다 (1,231건: Java 315, Python 149, C 210, C++ 287, JavaScript 120, Go 75, TypeScript 75).
 `input` 은 core 레코드와 같지만 검증된 패치는 공개하지 않으므로 `output` 은 항상 `[]` 입니다.
+test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코드와 `entireCode` 가 같은 core 레코드는 제외했습니다.
 
 > 언어별로 디렉터리를 분리하며, Java, JavaScript, C, C++, Go, Python, TypeScript 데이터를 제공합니다.
 
@@ -77,10 +78,10 @@ SecLLM-Dataset/
 | `data/java/input.jsonl` | 4,617 | input + output | 약 54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | 약 11 MB (11,520,239 bytes) |
 | `data/typescript/input.jsonl` | 527 | input + output | 약 4.3 MB (4,466,197 bytes) |
-| `data/python/input.jsonl` | 1,387 | input + output | 약 15 MB (16,164,883 bytes) |
+| `data/python/input.jsonl` | 1,356 | input + output | 약 15 MB (15,893,717 bytes) |
 | `data/go/input.jsonl` | 990 | input + output | 약 8 MB (8,484,125 bytes) |
-| `data/cpp/input.jsonl` | 3,887 | input + output | 약 38 MB (40,096,971 bytes) |
-| `data/c/input.jsonl` | 2,673 | input + output | 약 32 MB (33,438,245 bytes) |
+| `data/cpp/input.jsonl` | 3,814 | input + output | 약 38 MB (39,347,465 bytes) |
+| `data/c/input.jsonl` | 2,604 | input + output | 약 31 MB (32,648,099 bytes) |
 | `data/test/java.jsonl` | 315 | input only (`output` 은 `[]`) | 2,901,996 bytes |
 | `data/test/python.jsonl` | 149 | input only (`output` 은 `[]`) | 1,548,686 bytes |
 | `data/test/c.jsonl` | 210 | input only (`output` 은 `[]`) | 2,083,727 bytes |
@@ -119,11 +120,11 @@ SecLLM-Dataset/
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 3,887 |
+| 레코드 수 | 3,814 |
 | 언어 | C++ (`.cpp`) |
 | 고유 취약점 유형 | 108종 |
-| 파일 크기 | 약 38 MB (40,096,971 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 95 / 최대 2,992 |
+| 파일 크기 | 약 38 MB (39,347,465 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 96 / 최대 2,992 |
 
 `python scripts/validate.py --stats data/cpp/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -147,11 +148,11 @@ SecLLM-Dataset/
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 1,387 |
+| 레코드 수 | 1,356 |
 | 언어 | Python (`.py`) |
 | 고유 취약점 유형 | 38종 |
-| 파일 크기 | 약 15 MB (16,164,883 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 113 / 최대 2,802 |
+| 파일 크기 | 약 15 MB (15,893,717 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 114 / 최대 2,802 |
 
 `python scripts/validate.py --stats data/python/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -175,11 +176,11 @@ SecLLM-Dataset/
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 2,673 |
+| 레코드 수 | 2,604 |
 | 언어 | C (`.c`) |
 | 고유 취약점 유형 | 110종 |
-| 파일 크기 | 약 32 MB (33,438,245 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 148 / 최대 2,996 |
+| 파일 크기 | 약 31 MB (32,648,099 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 149 / 최대 2,996 |
 
 `python scripts/validate.py --stats data/c/input.jsonl` 로 다시 계산할 수 있습니다.
 

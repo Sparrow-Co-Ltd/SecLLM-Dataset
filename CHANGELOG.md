@@ -15,13 +15,13 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 ### Added
 
-- C dataset (`data/c/input.jsonl`): 2,673 records across 110 vulnerability types
+- C dataset (`data/c/input.jsonl`): 2,604 records across 110 vulnerability types
 - TypeScript dataset (`data/typescript/input.jsonl`): 527 records across 15 vulnerability types
   Excludes 1 records flagged by GitHub push protection for credential patterns.
-- Python dataset (`data/python/input.jsonl`): 1,387 records across 38 vulnerability types
+- Python dataset (`data/python/input.jsonl`): 1,356 records across 38 vulnerability types
   Excludes 2 records flagged by GitHub push protection for credential patterns.
 - Go dataset (`data/go/input.jsonl`): 990 records across 22 vulnerability types
-- C++ dataset (`data/cpp/input.jsonl`): 3,887 records across 108 vulnerability types
+- C++ dataset (`data/cpp/input.jsonl`): 3,814 records across 108 vulnerability types
 - JavaScript dataset (`data/javascript/input.jsonl`): 1,137 records across 37 vulnerability types
   Excludes 3 records flagged by GitHub push protection for credential patterns.
 - Project policies: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE, MAINTAINERS
@@ -33,6 +33,7 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Test inputs (`data/test/<lang>.jsonl`): 1,231 records in 7 files (Java 315, Python 149, C 210, C++ 287,
   JavaScript 120, Go 75, TypeScript 75). Same `input` schema as core records; `output` is always `[]`
 - Validator support for `data/test/<lang>.jsonl` (`output` must be `[]`) and matching `--self-test` cases
+- Core records that share a source file (`entireCode`) with a test record are removed: Python 31, C 69, C++ 73
 
 ### Changed
 
