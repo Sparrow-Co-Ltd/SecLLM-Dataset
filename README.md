@@ -31,7 +31,7 @@ For motivation, collection process, limitations, and responsible use, see the [d
 SecLLM-Dataset/
 └── data/
     ├── java/
-    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,617 records (~54 MB)
+    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,615 records (~54 MB)
     ├── javascript/
     │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
     ├── c/
@@ -39,7 +39,7 @@ SecLLM-Dataset/
     ├── cpp/
     │   └── input.jsonl        # C++ vulnerabilities + patches, 3,814 records (~38 MB)
     ├── go/
-    │   └── input.jsonl        # Go vulnerabilities + patches, 990 records (~8 MB)
+    │   └── input.jsonl        # Go vulnerabilities + patches, 989 records (~8 MB)
     ├── python/
     │   └── input.jsonl        # Python vulnerabilities + patches, 1,356 records (~15 MB)
     ├── typescript/
@@ -57,6 +57,8 @@ Each record pairs vulnerability information (`input`) with a patch that fixes it
 JavaScript 120, Go 75, TypeScript 75). A test record has the same `input` as a core record, but no verified
 patch is published, so `output` is always `[]`.
 No test source file appears in the core data: core records sharing an `entireCode` with a test record are removed.
+Core records with the same vulnerability type and flagged line as a test record in another version of the same file
+are also removed (Java 2, Go 1).
 
 ## Data tiers
 
@@ -76,11 +78,11 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 
 | File | Records | Format | Size |
 | --- | --- | --- | --- |
-| `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
+| `data/java/input.jsonl` | 4,615 | input + output | ~54 MB |
 | `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
 | `data/typescript/input.jsonl` | 527 | input + output | ~4.3 MB (4,466,197 bytes) |
 | `data/python/input.jsonl` | 1,356 | input + output | ~15 MB (15,893,717 bytes) |
-| `data/go/input.jsonl` | 990 | input + output | ~8 MB (8,484,125 bytes) |
+| `data/go/input.jsonl` | 989 | input + output | ~8 MB (8,475,052 bytes) |
 | `data/cpp/input.jsonl` | 3,814 | input + output | ~38 MB (39,347,465 bytes) |
 | `data/c/input.jsonl` | 2,604 | input + output | ~31 MB (32,648,099 bytes) |
 | `data/test/java.jsonl` | 315 | input only (`output` is `[]`) | 2,901,996 bytes |
@@ -95,11 +97,11 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 
 | Item | Value |
 | --- | --- |
-| Records | 4,617 |
+| Records | 4,615 |
 | Language | Java (`.java`) |
 | Unique vulnerability types | 101 |
-| File size | ~54 MB (56,475,076 bytes) |
-| Code length (lines) | min 9 / median 117 / max 2,998 |
+| File size | ~54 MB (56,442,866 bytes) |
+| Code length (lines) | min 9 / median 116 / max 2,998 |
 
 Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
 
@@ -135,10 +137,10 @@ Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 990 |
+| Records | 989 |
 | Language | Go (`.go`) |
 | Unique vulnerability types | 22 |
-| File size | ~8 MB (8,484,125 bytes) |
+| File size | ~8 MB (8,475,052 bytes) |
 | Code length (lines) | min 10 / median 118 / max 1,902 |
 
 Recompute with `python scripts/validate.py --stats data/go/input.jsonl`.
@@ -302,7 +304,7 @@ with open("data/java/input.jsonl", encoding="utf-8") as f:
     for line in f:
         records.append(json.loads(line))
 
-print(len(records))                      # 4617
+print(len(records))                      # 4615
 r = records[0]
 inp = r["input"]
 print(inp["issueNameEn"], inp["issueRisk"])  # Direct Use of Threads 높음

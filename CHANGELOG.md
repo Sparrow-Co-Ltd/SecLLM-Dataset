@@ -20,7 +20,7 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
   Excludes 1 records flagged by GitHub push protection for credential patterns.
 - Python dataset (`data/python/input.jsonl`): 1,356 records across 38 vulnerability types
   Excludes 2 records flagged by GitHub push protection for credential patterns.
-- Go dataset (`data/go/input.jsonl`): 990 records across 22 vulnerability types
+- Go dataset (`data/go/input.jsonl`): 989 records across 22 vulnerability types
 - C++ dataset (`data/cpp/input.jsonl`): 3,814 records across 108 vulnerability types
 - JavaScript dataset (`data/javascript/input.jsonl`): 1,137 records across 37 vulnerability types
   Excludes 3 records flagged by GitHub push protection for credential patterns.
@@ -33,12 +33,19 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Test inputs (`data/test/<lang>.jsonl`): 1,231 records in 7 files (Java 315, Python 149, C 210, C++ 287,
   JavaScript 120, Go 75, TypeScript 75). Same `input` schema as core records; `output` is always `[]`
 - Validator support for `data/test/<lang>.jsonl` (`output` must be `[]`) and matching `--self-test` cases
-- Core records that share a source file (`entireCode`) with a test record are removed: Python 31, C 69, C++ 73
+- Core records that share a source file (`entireCode`) with a test record are removed: Python 31, C 69, C++ 73.
+  Core records with the same vulnerability type and flagged line as a test record in another version of the same file
+  are also removed: Go 1
 
 ### Changed
 
 - NOTICE: English translation added; file-level license headers in `entireCode` take precedence
   (the upstream corpus filtered by repository-level license); removal requests go through an issue form
+
+### Removed
+
+- Java (`data/java/input.jsonl`): 2 records (4,617 → 4,615) with the same vulnerability type and flagged line as a test
+  record in another version of the same file
 
 ### Deprecated
 
