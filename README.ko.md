@@ -229,6 +229,17 @@ python scripts/validate.py                                 # data/**/*.jsonl 전
 python scripts/validate.py --stats data/java/input.jsonl   # 통계 출력
 ```
 
+## 원본 소스코드 코퍼스
+
+[scripts/starcoderdata/](scripts/starcoderdata/README.md)는
+[bigcode/starcoderdata](https://huggingface.co/datasets/bigcode/starcoderdata)에서 언어별 parquet 파일을 내려받아
+행마다 소스 파일 하나로 추출합니다(Sparrow SAST 분석에 쓰는 폴더 구조). [uv](https://docs.astral.sh/uv/)와
+gated 데이터셋 접근 권한이 있는 HuggingFace 토큰이 필요합니다.
+
+```bash
+uv run scripts/starcoderdata/download_starcoderdata.py --language java --max-rows 5000
+```
+
 ## 인용
 
 인용 정보는 [CITATION.cff](CITATION.cff)에 있습니다(GitHub의 "Cite this repository" 버튼으로도 확인할 수 있습니다).

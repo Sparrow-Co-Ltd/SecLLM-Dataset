@@ -227,6 +227,17 @@ python scripts/validate.py                                 # validate every data
 python scripts/validate.py --stats data/java/input.jsonl   # print statistics
 ```
 
+## Upstream source corpus
+
+[scripts/starcoderdata/](scripts/starcoderdata/README.md) downloads the
+[bigcode/starcoderdata](https://huggingface.co/datasets/bigcode/starcoderdata) parquet files for a language and
+extracts one source file per row, in the layout used to run Sparrow SAST. It needs [uv](https://docs.astral.sh/uv/)
+and a HuggingFace token with access to the gated dataset.
+
+```bash
+uv run scripts/starcoderdata/download_starcoderdata.py --language java --max-rows 5000
+```
+
 ## Citation
 
 Citation metadata is in [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button).

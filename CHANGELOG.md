@@ -20,6 +20,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Validator (`scripts/validate.py`) and CI workflows
 - Validator support for JavaScript, TypeScript, Go, Python, C, and C++ datasets,
   in addition to Java
+- StarCoderData download scripts (`scripts/starcoderdata/`) that fetch the upstream parquet files and extract
+  source files for SAST analysis
 - Community data track (`data/community/`) for data produced with third-party tools
 
 ### Changed
