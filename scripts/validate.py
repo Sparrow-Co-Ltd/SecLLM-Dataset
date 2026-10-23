@@ -9,6 +9,8 @@ Usage:
 Tiers are derived from the path:
   data/<lang>/*.jsonl            core records      {input, output}
   data/community/<lang>/*.jsonl  community records {input, output, meta}
+  data/test/<lang>.jsonl         test records      {input, output}, output is always []
+                                 (test inputs only: no verified patch is published)
 """
 import argparse
 import copy
@@ -63,8 +65,11 @@ def keys_error(obj, expected, where):
     return errs + [f"{where}: unexpected field {k!r}" for k in sorted(extra)]
 
 
-def check_record(rec, community, lang):
-    """Return a list of error strings for one record (empty list = valid)."""
+def check_record(rec, community, lang, test=False):
+    """Return a list of error strings for one record (empty list = valid).
+
+    test=True checks a data/test/ record: same input schema as core, but output must be [].
+    """
     envelope = {"input", "output", "meta"} if community else {"input", "output"}
     errs = keys_error(rec, envelope, "record")
     if errs:
@@ -112,7 +117,11 @@ def check_record(rec, community, lang):
             errs.append(f"{where}.params: expected object")
 
     out = rec["output"]
-    if not isinstance(out, list) or not out:
+    if test:
+        if out != []:
+            errs.append("output: test records must have an empty output list")
+        out = []
+    elif not isinstance(out, list) or not out:
         errs.append("output: expected non-empty list")
         out = []
     for i, o in enumerate(out):
@@ -158,26 +167,38 @@ def check_record(rec, community, lang):
 
 
 def tier_of(path):
-    """Return (community, lang) for a data file path, or raise ValueError."""
+    """Return (tier, lang) for a data file path, or raise ValueError.
+
+    tier is "core", "community" or "test".
+    """
     try:
         parts = path.resolve().relative_to(DATA).parts
     except ValueError:
         raise ValueError("file must be under data/")
+    if parts[0] == "test":
+        if len(parts) != 2 or not parts[1].endswith(".jsonl"):
+            raise ValueError("expected data/test/<lang>.jsonl")
+        lang = parts[1][:-len(".jsonl")]
+        if lang not in LANGS:
+            raise ValueError(f"unknown test language {lang!r}; add it to LANGS in scripts/validate.py")
+        return "test", lang
     community = parts[0] == "community"
     if community:
         parts = parts[1:]
     if len(parts) != 2:
-        raise ValueError("expected data/<lang>/FILE.jsonl or data/community/<lang>/FILE.jsonl")
+        raise ValueError("expected data/<lang>/FILE.jsonl, data/community/<lang>/FILE.jsonl "
+                         "or data/test/<lang>.jsonl")
     if parts[0] not in LANGS:
         raise ValueError(f"unknown language directory {parts[0]!r}; add it to LANGS in scripts/validate.py")
-    return community, parts[0]
+    return ("community" if community else "core"), parts[0]
 
 
 def validate_file(path):
     try:
-        community, lang = tier_of(path)
+        tier, lang = tier_of(path)
     except ValueError as e:
         return 0, [f"{path}: {e}"]
+    community, test = tier == "community", tier == "test"
     count, errs = 0, []
     with open(path, encoding="utf-8") as f:
         for lineno, line in enumerate(f, 1):
@@ -187,7 +208,7 @@ def validate_file(path):
             except json.JSONDecodeError as e:
                 errs.append(f"{path}:{lineno}: invalid JSON ({e.msg})")
                 continue
-            errs += [f"{path}:{lineno}: {m}" for m in check_record(rec, community, lang)]
+            errs += [f"{path}:{lineno}: {m}" for m in check_record(rec, community, lang, test)]
     if count == 0:
         errs.append(f"{path}: file contains no records")
     return count, errs
@@ -297,7 +318,7 @@ def self_test():
             except ValueError as e:
                 failures.append(f"valid path rejected: {name}: {e}")
                 continue
-            if actual_tier != (community, lang):
+            if actual_tier != ("community" if community else "core", lang):
                 failures.append(f"valid path misclassified: {name}: {actual_tier}")
             valid_paths += 1
             # Only metadata is varied: the validator does not parse source syntax.
@@ -324,7 +345,43 @@ def self_test():
         mutate(rec)
         if not check_record(rec, community, "java"):
             failures.append(f"not rejected: {name}")
-    for bad in ("community/cobol/x.jsonl", "x.jsonl", "java/sub/x.jsonl"):
+    # data/test/<lang>.jsonl: core input schema, output must be []
+    test_tmpl = copy.deepcopy(core)
+    test_tmpl["output"] = []
+    test_cases = [
+        ("test non-empty output", set_(["output"], core["output"])),
+        ("test output null", set_(["output"], None)),
+        ("test missing field", del_(["input", "issueRisk"])),
+        ("test extra field", set_(["input", "extra"], 1)),
+        ("test empty contexts", set_(["input", "contexts"], [])),
+        ("test language mismatch", set_(["input", "programmingLanguage"], "Kotlin")),
+        ("test with meta", set_(["meta"], {})),
+    ]
+    valid_test_paths = 0
+    for lang, ext, language in language_cases:
+        path = DATA / "test" / f"{lang}.jsonl"
+        try:
+            actual_tier = tier_of(path)
+        except ValueError as e:
+            failures.append(f"valid test path rejected: test/{lang}: {e}")
+            continue
+        if actual_tier != ("test", lang):
+            failures.append(f"valid test path misclassified: test/{lang}: {actual_tier}")
+        valid_test_paths += 1
+        rec = copy.deepcopy(test_tmpl)
+        rec["input"].update(fileExtension=ext, programmingLanguage=language)
+        errs = check_record(rec, False, lang, True)
+        if errs:
+            failures.append(f"valid test/{lang} record rejected: {errs}")
+        valid_records += 1
+    for name, mutate in test_cases:
+        rec = copy.deepcopy(test_tmpl)
+        mutate(rec)
+        if not check_record(rec, False, "java", True):
+            failures.append(f"not rejected: {name}")
+    bad_paths = ("community/cobol/x.jsonl", "x.jsonl", "java/sub/x.jsonl",
+                 "test/cobol.jsonl", "test/java/x.jsonl", "test/java.json", "test.jsonl")
+    for bad in bad_paths:
         try:
             tier_of(DATA / bad)
             failures.append(f"path not rejected: data/{bad}")
@@ -334,7 +391,8 @@ def self_test():
         print("self-test FAILED:\n  " + "\n  ".join(failures))
         return 1
     print(f"self-test OK: {valid_records} valid records and {valid_paths} valid paths accepted, "
-          f"{len(cases) + language_mismatches} broken records and 3 bad paths rejected")
+          f"{len(cases) + len(test_cases) + language_mismatches} broken records and {len(bad_paths)} bad paths rejected "
+          f"({valid_test_paths} test paths included)")
     return 0
 
 

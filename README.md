@@ -31,20 +31,40 @@ For motivation, collection process, limitations, and responsible use, see the [d
 SecLLM-Dataset/
 └── data/
     ├── java/
-    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,617 records (~54 MB)
+    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,615 records (~54 MB)
+    ├── javascript/
+    │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
+    ├── c/
+    │   └── input.jsonl        # C vulnerabilities + patches, 2,604 records (~31 MB)
+    ├── cpp/
+    │   └── input.jsonl        # C++ vulnerabilities + patches, 3,814 records (~38 MB)
+    ├── go/
+    │   └── input.jsonl        # Go vulnerabilities + patches, 989 records (~8 MB)
+    ├── python/
+    │   └── input.jsonl        # Python vulnerabilities + patches, 1,356 records (~15 MB)
+    ├── typescript/
+    │   └── input.jsonl        # TypeScript vulnerabilities + patches, 527 records (~4.3 MB)
+    ├── test/                  # Test inputs, 1,231 records in 7 files (no patches)
     └── community/             # Community track: data from third-party tools (see below)
 ```
 
 Files are **JSON Lines**: one line is one vulnerability instance (a JSON object).
 Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
-> Data is split by language. Languages other than Java will be added.
+> Data is split by language. Java, JavaScript, C, C++, Go, Python and TypeScript datasets are available.
+
+`data/test/<lang>.jsonl` holds test inputs (1,231 records: Java 315, Python 149, C 210, C++ 287,
+JavaScript 120, Go 75, TypeScript 75). A test record has the same `input` as a core record, but no verified
+patch is published, so `output` is always `[]`.
+No test source file appears in the core data: core records sharing an `entireCode` with a test record are removed.
+Core records with the same vulnerability type and flagged line as a test record in another version of the same file
+are also removed (Java 2, Go 1).
 
 ## Data tiers
 
 | Tier | Path | Produced by | Verification |
 | --- | --- | --- | --- |
-| Core | `data/java/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
+| Core | `data/java/`, `data/javascript/`, `data/c/`, `data/cpp/`, `data/go/`, `data/python/`, `data/typescript/` | Sparrow SAST detection and annotation | Patches re-verified by the maintainers with Sparrow SAST |
 | Community | `data/community/<lang>/` | Third-party tools (e.g. Semgrep, CodeQL), contributed by the community | Attested by the contributor; CI checks schema and provenance only |
 
 Community records use the same `input`/`output` schema plus a required `meta` object with provenance
@@ -58,19 +78,114 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 
 | File | Records | Format | Size |
 | --- | --- | --- | --- |
-| `data/java/input.jsonl` | 4,617 | input + output | ~54 MB |
+| `data/java/input.jsonl` | 4,615 | input + output | ~54 MB |
+| `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
+| `data/typescript/input.jsonl` | 527 | input + output | ~4.3 MB (4,466,197 bytes) |
+| `data/python/input.jsonl` | 1,356 | input + output | ~15 MB (15,893,717 bytes) |
+| `data/go/input.jsonl` | 989 | input + output | ~8 MB (8,475,052 bytes) |
+| `data/cpp/input.jsonl` | 3,814 | input + output | ~38 MB (39,347,465 bytes) |
+| `data/c/input.jsonl` | 2,604 | input + output | ~31 MB (32,648,099 bytes) |
+| `data/test/java.jsonl` | 315 | input only (`output` is `[]`) | 2,901,996 bytes |
+| `data/test/python.jsonl` | 149 | input only (`output` is `[]`) | 1,548,686 bytes |
+| `data/test/c.jsonl` | 210 | input only (`output` is `[]`) | 2,083,727 bytes |
+| `data/test/cpp.jsonl` | 287 | input only (`output` is `[]`) | 2,444,046 bytes |
+| `data/test/javascript.jsonl` | 120 | input only (`output` is `[]`) | 1,229,428 bytes |
+| `data/test/go.jsonl` | 75 | input only (`output` is `[]`) | 1,324,727 bytes |
+| `data/test/typescript.jsonl` | 75 | input only (`output` is `[]`) | 659,954 bytes |
 
-### Overall (`data/java/input.jsonl`)
+### Java (`data/java/input.jsonl`)
 
 | Item | Value |
 | --- | --- |
-| Records | 4,617 |
+| Records | 4,615 |
 | Language | Java (`.java`) |
 | Unique vulnerability types | 101 |
-| File size | ~54 MB (56,475,076 bytes) |
-| Code length (lines) | min 9 / median 117 / max 2,998 |
+| File size | ~54 MB (56,442,866 bytes) |
+| Code length (lines) | min 9 / median 116 / max 2,998 |
 
 Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
+
+### JavaScript (`data/javascript/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 1,137 |
+| Language | JavaScript (`.js`) |
+| Unique vulnerability types | 37 |
+| File size | ~11 MB (11,520,239 bytes) |
+| Code length (lines) | min 9 / median 93 / max 2,772 |
+
+Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
+
+---
+
+### C++ (`data/cpp/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 3,814 |
+| Language | C++ (`.cpp`) |
+| Unique vulnerability types | 108 |
+| File size | ~38 MB (39,347,465 bytes) |
+| Code length (lines) | min 9 / median 96 / max 2,992 |
+
+Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
+
+---
+
+### Go (`data/go/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 989 |
+| Language | Go (`.go`) |
+| Unique vulnerability types | 22 |
+| File size | ~8 MB (8,475,052 bytes) |
+| Code length (lines) | min 10 / median 118 / max 1,902 |
+
+Recompute with `python scripts/validate.py --stats data/go/input.jsonl`.
+
+---
+
+### Python (`data/python/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 1,356 |
+| Language | Python (`.py`) |
+| Unique vulnerability types | 38 |
+| File size | ~15 MB (15,893,717 bytes) |
+| Code length (lines) | min 9 / median 114 / max 2,802 |
+
+Recompute with `python scripts/validate.py --stats data/python/input.jsonl`.
+
+---
+
+### TypeScript (`data/typescript/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 527 |
+| Language | TypeScript (`.ts`) |
+| Unique vulnerability types | 15 |
+| File size | ~4.3 MB (4,466,197 bytes) |
+| Code length (lines) | min 9 / median 88 / max 2,977 |
+
+Recompute with `python scripts/validate.py --stats data/typescript/input.jsonl`.
+
+---
+
+### C (`data/c/input.jsonl`)
+
+| Item | Value |
+| --- | --- |
+| Records | 2,604 |
+| Language | C (`.c`) |
+| Unique vulnerability types | 110 |
+| File size | ~31 MB (32,648,099 bytes) |
+| Code length (lines) | min 9 / median 149 / max 2,996 |
+
+Recompute with `python scripts/validate.py --stats data/c/input.jsonl`.
 
 ---
 
@@ -189,7 +304,7 @@ with open("data/java/input.jsonl", encoding="utf-8") as f:
     for line in f:
         records.append(json.loads(line))
 
-print(len(records))                      # 4617
+print(len(records))                      # 4615
 r = records[0]
 inp = r["input"]
 print(inp["issueNameEn"], inp["issueRisk"])  # Direct Use of Threads 높음
