@@ -327,9 +327,9 @@ def self_test():
     for bad in ("community/cobol/x.jsonl", "x.jsonl", "java/sub/x.jsonl"):
         try:
             tier_of(DATA / bad)
-            failures.append(f"path not rejected: data/{bad}")
         except ValueError:
-            pass
+            continue  # expected: invalid paths must be rejected
+        failures.append(f"path not rejected: data/{bad}")
     if failures:
         print("self-test FAILED:\n  " + "\n  ".join(failures))
         return 1
