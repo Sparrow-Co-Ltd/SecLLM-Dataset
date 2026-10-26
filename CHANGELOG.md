@@ -29,6 +29,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Validator (`scripts/validate.py`) and CI workflows
 - Validator support for JavaScript, TypeScript, Go, Python, C, and C++ datasets,
   in addition to Java
+- StarCoderData download scripts (`scripts/starcoderdata/`) that fetch the upstream parquet files and extract
+  source files for SAST analysis
 - Community data track (`data/community/`) for data produced with third-party tools
 - Test inputs (`data/test/<lang>.jsonl`): 1,231 records in 7 files (Java 315, Python 149, C 210, C++ 287,
   JavaScript 120, Go 75, TypeScript 75). Same `input` schema as core records; `output` is always `[]`
