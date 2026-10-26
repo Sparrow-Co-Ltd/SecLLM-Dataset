@@ -31,19 +31,19 @@ For motivation, collection process, limitations, and responsible use, see the [d
 SecLLM-Dataset/
 └── data/
     ├── java/
-    │   └── input.jsonl        # Java vulnerabilities + verified patches, 4,615 records (~54 MB)
+    │   └── input.jsonl        # Java vulnerabilities + verified patches, 2,324 records (~25 MB)
     ├── javascript/
-    │   └── input.jsonl        # JavaScript vulnerabilities + patches, 1,137 records (~11 MB)
+    │   └── input.jsonl        # JavaScript vulnerabilities + patches, 332 records (~3.3 MB)
     ├── c/
-    │   └── input.jsonl        # C vulnerabilities + patches, 2,604 records (~31 MB)
+    │   └── input.jsonl        # C vulnerabilities + patches, 1,794 records (~20 MB)
     ├── cpp/
-    │   └── input.jsonl        # C++ vulnerabilities + patches, 3,814 records (~38 MB)
+    │   └── input.jsonl        # C++ vulnerabilities + patches, 2,479 records (~24 MB)
     ├── go/
-    │   └── input.jsonl        # Go vulnerabilities + patches, 989 records (~8 MB)
+    │   └── input.jsonl        # Go vulnerabilities + patches, 222 records (~1.7 MB)
     ├── python/
-    │   └── input.jsonl        # Python vulnerabilities + patches, 1,356 records (~15 MB)
+    │   └── input.jsonl        # Python vulnerabilities + patches, 114 records (~1.4 MB)
     ├── typescript/
-    │   └── input.jsonl        # TypeScript vulnerabilities + patches, 527 records (~4.3 MB)
+    │   └── input.jsonl        # TypeScript vulnerabilities + patches, 137 records (~1.0 MB)
     ├── test/                  # Test inputs, 1,231 records in 7 files (no patches)
     └── community/             # Community track: data from third-party tools (see below)
 ```
@@ -59,6 +59,13 @@ patch is published, so `output` is always `[]`.
 No test source file appears in the core data: core records sharing an `entireCode` with a test record are removed.
 Core records with the same vulnerability type and flagged line as a test record in another version of the same file
 are also removed (Java 2, Go 1).
+
+Core records keep only **true-positive findings**. Each finding was reviewed against the real source file by at least two
+independent LLM reviewers, with additional reviews where they disagreed, and labeled true positive (the defect the
+rule describes really exists at the reported line), policy (the construct is there but the rule's concern does not apply
+to this code), or false positive (the analyzer misread the code). Findings labeled policy or false positive, and
+findings without a review label, are removed (Java 2,291, JavaScript 805, TypeScript 390, Go 767, Python 1,242,
+C 810, C++ 1,335). Test inputs are not filtered by this review.
 
 ## Data tiers
 
@@ -78,13 +85,13 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 
 | File | Records | Format | Size |
 | --- | --- | --- | --- |
-| `data/java/input.jsonl` | 4,615 | input + output | ~54 MB |
-| `data/javascript/input.jsonl` | 1,137 | input + output | ~11 MB (11,520,239 bytes) |
-| `data/typescript/input.jsonl` | 527 | input + output | ~4.3 MB (4,466,197 bytes) |
-| `data/python/input.jsonl` | 1,356 | input + output | ~15 MB (15,893,717 bytes) |
-| `data/go/input.jsonl` | 989 | input + output | ~8 MB (8,475,052 bytes) |
-| `data/cpp/input.jsonl` | 3,814 | input + output | ~38 MB (39,347,465 bytes) |
-| `data/c/input.jsonl` | 2,604 | input + output | ~31 MB (32,648,099 bytes) |
+| `data/java/input.jsonl` | 2,324 | input + output | ~25 MB |
+| `data/javascript/input.jsonl` | 332 | input + output | ~3.3 MB (3,276,977 bytes) |
+| `data/typescript/input.jsonl` | 137 | input + output | ~1.0 MB (979,877 bytes) |
+| `data/python/input.jsonl` | 114 | input + output | ~1.4 MB (1,422,445 bytes) |
+| `data/go/input.jsonl` | 222 | input + output | ~1.7 MB (1,742,037 bytes) |
+| `data/cpp/input.jsonl` | 2,479 | input + output | ~24 MB (24,233,051 bytes) |
+| `data/c/input.jsonl` | 1,794 | input + output | ~20 MB (20,314,910 bytes) |
 | `data/test/java.jsonl` | 315 | input only (`output` is `[]`) | 2,901,996 bytes |
 | `data/test/python.jsonl` | 149 | input only (`output` is `[]`) | 1,548,686 bytes |
 | `data/test/c.jsonl` | 210 | input only (`output` is `[]`) | 2,083,727 bytes |
@@ -97,11 +104,11 @@ Community records use the same `input`/`output` schema plus a required `meta` ob
 
 | Item | Value |
 | --- | --- |
-| Records | 4,615 |
+| Records | 2,324 |
 | Language | Java (`.java`) |
-| Unique vulnerability types | 101 |
-| File size | ~54 MB (56,442,866 bytes) |
-| Code length (lines) | min 9 / median 116 / max 2,998 |
+| Unique vulnerability types | 88 |
+| File size | ~25 MB (25,386,476 bytes) |
+| Code length (lines) | min 9 / median 105 / max 2,929 |
 
 Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
 
@@ -109,11 +116,11 @@ Recompute with `python scripts/validate.py --stats data/java/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 1,137 |
+| Records | 332 |
 | Language | JavaScript (`.js`) |
-| Unique vulnerability types | 37 |
-| File size | ~11 MB (11,520,239 bytes) |
-| Code length (lines) | min 9 / median 93 / max 2,772 |
+| Unique vulnerability types | 26 |
+| File size | ~3.3 MB (3,276,977 bytes) |
+| Code length (lines) | min 9 / median 77 / max 2,728 |
 
 Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
 
@@ -123,11 +130,11 @@ Recompute with `python scripts/validate.py --stats data/javascript/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 3,814 |
+| Records | 2,479 |
 | Language | C++ (`.cpp`) |
-| Unique vulnerability types | 108 |
-| File size | ~38 MB (39,347,465 bytes) |
-| Code length (lines) | min 9 / median 96 / max 2,992 |
+| Unique vulnerability types | 86 |
+| File size | ~24 MB (24,233,051 bytes) |
+| Code length (lines) | min 9 / median 93 / max 2,992 |
 
 Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
 
@@ -137,11 +144,11 @@ Recompute with `python scripts/validate.py --stats data/cpp/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 989 |
+| Records | 222 |
 | Language | Go (`.go`) |
-| Unique vulnerability types | 22 |
-| File size | ~8 MB (8,475,052 bytes) |
-| Code length (lines) | min 10 / median 118 / max 1,902 |
+| Unique vulnerability types | 12 |
+| File size | ~1.7 MB (1,742,037 bytes) |
+| Code length (lines) | min 14 / median 111.5 / max 1,902 |
 
 Recompute with `python scripts/validate.py --stats data/go/input.jsonl`.
 
@@ -151,11 +158,11 @@ Recompute with `python scripts/validate.py --stats data/go/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 1,356 |
+| Records | 114 |
 | Language | Python (`.py`) |
-| Unique vulnerability types | 38 |
-| File size | ~15 MB (15,893,717 bytes) |
-| Code length (lines) | min 9 / median 114 / max 2,802 |
+| Unique vulnerability types | 21 |
+| File size | ~1.4 MB (1,422,445 bytes) |
+| Code length (lines) | min 14 / median 100.5 / max 2,802 |
 
 Recompute with `python scripts/validate.py --stats data/python/input.jsonl`.
 
@@ -165,11 +172,11 @@ Recompute with `python scripts/validate.py --stats data/python/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 527 |
+| Records | 137 |
 | Language | TypeScript (`.ts`) |
-| Unique vulnerability types | 15 |
-| File size | ~4.3 MB (4,466,197 bytes) |
-| Code length (lines) | min 9 / median 88 / max 2,977 |
+| Unique vulnerability types | 12 |
+| File size | ~1.0 MB (979,877 bytes) |
+| Code length (lines) | min 10 / median 87 / max 1,036 |
 
 Recompute with `python scripts/validate.py --stats data/typescript/input.jsonl`.
 
@@ -179,11 +186,11 @@ Recompute with `python scripts/validate.py --stats data/typescript/input.jsonl`.
 
 | Item | Value |
 | --- | --- |
-| Records | 2,604 |
+| Records | 1,794 |
 | Language | C (`.c`) |
-| Unique vulnerability types | 110 |
-| File size | ~31 MB (32,648,099 bytes) |
-| Code length (lines) | min 9 / median 149 / max 2,996 |
+| Unique vulnerability types | 86 |
+| File size | ~20 MB (20,314,910 bytes) |
+| Code length (lines) | min 9 / median 126.5 / max 2,996 |
 
 Recompute with `python scripts/validate.py --stats data/c/input.jsonl`.
 
@@ -304,7 +311,7 @@ with open("data/java/input.jsonl", encoding="utf-8") as f:
     for line in f:
         records.append(json.loads(line))
 
-print(len(records))                      # 4615
+print(len(records))                      # 2324
 r = records[0]
 inp = r["input"]
 print(inp["issueNameEn"], inp["issueRisk"])  # Direct Use of Threads 높음
@@ -328,7 +335,7 @@ inputs = pd.json_normalize(df["input"])
 print(inputs["issueNameEn"].value_counts())
 ```
 
-> The file is about 54 MB and fits in memory, but streaming is recommended for large-scale processing.
+> The file is about 25 MB and fits in memory, but streaming is recommended for large-scale processing.
 
 ---
 
