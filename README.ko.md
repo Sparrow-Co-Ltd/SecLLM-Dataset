@@ -31,19 +31,19 @@ LLM 학습·평가에 사용할 수 있는 JSON Lines 형식으로 정리한 데
 SecLLM-Dataset/
 └── data/
     ├── java/
-    │   └── input.jsonl        # Java 취약점 + 해결 확인된 패치 4,615건 (약 54MB)
+    │   └── input.jsonl        # Java 취약점 + 해결 확인된 패치 2,324건 (약 25MB)
     ├── javascript/
-    │   └── input.jsonl        # JavaScript 취약점 + 패치 1,137건 (약 11MB)
+    │   └── input.jsonl        # JavaScript 취약점 + 패치 332건 (약 3.3MB)
     ├── c/
-    │   └── input.jsonl        # C 취약점 + 패치 2,604건 (약 31MB)
+    │   └── input.jsonl        # C 취약점 + 패치 1,794건 (약 20MB)
     ├── cpp/
-    │   └── input.jsonl        # C++ 취약점 + 패치 3,814건 (약 38MB)
+    │   └── input.jsonl        # C++ 취약점 + 패치 2,479건 (약 24MB)
     ├── go/
-    │   └── input.jsonl        # Go 취약점 + 패치 989건 (약 8MB)
+    │   └── input.jsonl        # Go 취약점 + 패치 222건 (약 1.7MB)
     ├── python/
-    │   └── input.jsonl        # Python 취약점 + 패치 1,356건 (약 15MB)
+    │   └── input.jsonl        # Python 취약점 + 패치 114건 (약 1.4MB)
     ├── typescript/
-    │   └── input.jsonl        # TypeScript 취약점 + 패치 527건 (약 4.3MB)
+    │   └── input.jsonl        # TypeScript 취약점 + 패치 137건 (약 1.0MB)
     ├── test/                  # 평가용 test 입력 1,231건 (7개 파일, 패치 없음)
     └── community/             # 커뮤니티 트랙: 서드파티 도구로 만든 데이터 (아래 참조)
 ```
@@ -55,6 +55,11 @@ SecLLM-Dataset/
 `input` 은 core 레코드와 같지만 검증된 패치는 공개하지 않으므로 `output` 은 항상 `[]` 입니다.
 test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코드와 `entireCode` 가 같은 core 레코드는 제외했습니다.
 같은 파일의 다른 버전에서 test 레코드와 취약점 유형·검출 줄이 같은 core 레코드도 제외했습니다 (Java 2, Go 1).
+
+core 레코드에는 **정탐(true positive) 검출만** 남겼습니다. 각 검출을 실제 소스 파일과 대조해 LLM 검토자가 2회 이상 독립적으로
+판정했고, 판정이 엇갈리면 추가로 검토했습니다. 판정은 정탐(규칙이 설명하는 결함이 검출 줄에 실제로 존재), policy(구문은 있으나
+이 코드에는 규칙의 우려가 해당하지 않음), 오탐(분석기가 코드를 잘못 읽음) 세 가지입니다. policy·오탐 판정 검출과 판정이 없는 검출은
+제외했습니다 (Java 2,291, JavaScript 805, TypeScript 390, Go 767, Python 1,242, C 810, C++ 1,335). test 입력은 이 판정으로 거르지 않았습니다.
 
 > 언어별로 디렉터리를 분리하며, Java, JavaScript, C, C++, Go, Python, TypeScript 데이터를 제공합니다.
 
@@ -76,13 +81,13 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 파일 | 레코드 수 | 형식 | 크기 |
 | --- | --- | --- | --- |
-| `data/java/input.jsonl` | 4,615 | input + output | 약 54 MB |
-| `data/javascript/input.jsonl` | 1,137 | input + output | 약 11 MB (11,520,239 bytes) |
-| `data/typescript/input.jsonl` | 527 | input + output | 약 4.3 MB (4,466,197 bytes) |
-| `data/python/input.jsonl` | 1,356 | input + output | 약 15 MB (15,893,717 bytes) |
-| `data/go/input.jsonl` | 989 | input + output | 약 8 MB (8,475,052 bytes) |
-| `data/cpp/input.jsonl` | 3,814 | input + output | 약 38 MB (39,347,465 bytes) |
-| `data/c/input.jsonl` | 2,604 | input + output | 약 31 MB (32,648,099 bytes) |
+| `data/java/input.jsonl` | 2,324 | input + output | 약 25 MB |
+| `data/javascript/input.jsonl` | 332 | input + output | 약 3.3 MB (3,276,977 bytes) |
+| `data/typescript/input.jsonl` | 137 | input + output | 약 1.0 MB (979,877 bytes) |
+| `data/python/input.jsonl` | 114 | input + output | 약 1.4 MB (1,422,445 bytes) |
+| `data/go/input.jsonl` | 222 | input + output | 약 1.7 MB (1,742,037 bytes) |
+| `data/cpp/input.jsonl` | 2,479 | input + output | 약 24 MB (24,233,051 bytes) |
+| `data/c/input.jsonl` | 1,794 | input + output | 약 20 MB (20,314,910 bytes) |
 | `data/test/java.jsonl` | 315 | input only (`output` 은 `[]`) | 2,901,996 bytes |
 | `data/test/python.jsonl` | 149 | input only (`output` 은 `[]`) | 1,548,686 bytes |
 | `data/test/c.jsonl` | 210 | input only (`output` 은 `[]`) | 2,083,727 bytes |
@@ -95,11 +100,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 4,615 |
+| 레코드 수 | 2,324 |
 | 언어 | Java (`.java`) |
-| 고유 취약점 유형 | 101종 |
-| 파일 크기 | 약 54 MB (56,442,866 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 116 / 최대 2,998 |
+| 고유 취약점 유형 | 88종 |
+| 파일 크기 | 약 25 MB (25,386,476 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 105 / 최대 2,929 |
 
 `python scripts/validate.py --stats data/java/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -107,11 +112,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 1,137 |
+| 레코드 수 | 332 |
 | 언어 | JavaScript (`.js`) |
-| 고유 취약점 유형 | 37종 |
-| 파일 크기 | 약 11 MB (11,520,239 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 93 / 최대 2,772 |
+| 고유 취약점 유형 | 26종 |
+| 파일 크기 | 약 3.3 MB (3,276,977 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 77 / 최대 2,728 |
 
 `python scripts/validate.py --stats data/javascript/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -121,11 +126,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 3,814 |
+| 레코드 수 | 2,479 |
 | 언어 | C++ (`.cpp`) |
-| 고유 취약점 유형 | 108종 |
-| 파일 크기 | 약 38 MB (39,347,465 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 96 / 최대 2,992 |
+| 고유 취약점 유형 | 86종 |
+| 파일 크기 | 약 24 MB (24,233,051 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 93 / 최대 2,992 |
 
 `python scripts/validate.py --stats data/cpp/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -135,11 +140,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 989 |
+| 레코드 수 | 222 |
 | 언어 | Go (`.go`) |
-| 고유 취약점 유형 | 22종 |
-| 파일 크기 | 약 8 MB (8,475,052 bytes) |
-| 코드 길이(라인) | 최소 10 / 중앙값 118 / 최대 1,902 |
+| 고유 취약점 유형 | 12종 |
+| 파일 크기 | 약 1.7 MB (1,742,037 bytes) |
+| 코드 길이(라인) | 최소 14 / 중앙값 111.5 / 최대 1,902 |
 
 `python scripts/validate.py --stats data/go/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -149,11 +154,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 1,356 |
+| 레코드 수 | 114 |
 | 언어 | Python (`.py`) |
-| 고유 취약점 유형 | 38종 |
-| 파일 크기 | 약 15 MB (15,893,717 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 114 / 최대 2,802 |
+| 고유 취약점 유형 | 21종 |
+| 파일 크기 | 약 1.4 MB (1,422,445 bytes) |
+| 코드 길이(라인) | 최소 14 / 중앙값 100.5 / 최대 2,802 |
 
 `python scripts/validate.py --stats data/python/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -163,11 +168,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 527 |
+| 레코드 수 | 137 |
 | 언어 | TypeScript (`.ts`) |
-| 고유 취약점 유형 | 15종 |
-| 파일 크기 | 약 4.3 MB (4,466,197 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 88 / 최대 2,977 |
+| 고유 취약점 유형 | 12종 |
+| 파일 크기 | 약 1.0 MB (979,877 bytes) |
+| 코드 길이(라인) | 최소 10 / 중앙값 87 / 최대 1,036 |
 
 `python scripts/validate.py --stats data/typescript/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -177,11 +182,11 @@ test 소스 파일은 core 데이터에 들어 있지 않습니다. test 레코�
 
 | 항목 | 값 |
 | --- | --- |
-| 레코드 수 | 2,604 |
+| 레코드 수 | 1,794 |
 | 언어 | C (`.c`) |
-| 고유 취약점 유형 | 110종 |
-| 파일 크기 | 약 31 MB (32,648,099 bytes) |
-| 코드 길이(라인) | 최소 9 / 중앙값 149 / 최대 2,996 |
+| 고유 취약점 유형 | 86종 |
+| 파일 크기 | 약 20 MB (20,314,910 bytes) |
+| 코드 길이(라인) | 최소 9 / 중앙값 126.5 / 최대 2,996 |
 
 `python scripts/validate.py --stats data/c/input.jsonl` 로 다시 계산할 수 있습니다.
 
@@ -304,7 +309,7 @@ with open("data/java/input.jsonl", encoding="utf-8") as f:
     for line in f:
         records.append(json.loads(line))
 
-print(len(records))                      # 4615
+print(len(records))                      # 2324
 r = records[0]
 inp = r["input"]
 print(inp["issueNameKo"], inp["issueRisk"])  # 스레드의 직접 사용 높음
@@ -328,7 +333,7 @@ inputs = pd.json_normalize(df["input"])
 print(inputs["issueNameEn"].value_counts())
 ```
 
-> 파일이 약 54MB이므로 전체를 메모리에 올릴 수 있지만, 대용량 처리 시에는 스트리밍 방식을 권장합니다.
+> 파일이 약 25MB이므로 전체를 메모리에 올릴 수 있지만, 대용량 처리 시에는 스트리밍 방식을 권장합니다.
 
 ---
 

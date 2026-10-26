@@ -56,7 +56,10 @@ Numbers refer to release 1.0.0 (`data/java/input.jsonl`) and can be recomputed w
 - Line numbers in `issueLineNumber`, `contexts[].lineNo`, and `output[]` are 1-based and refer to the original `entireCode`.
 - `entireCode` keeps the upstream text, including the PII placeholders introduced by starcoderdata's redaction
   (see [Personal and Sensitive Information](#personal-and-sensitive-information)).
-- Manual review of individual findings or patches is not documented in this release.
+- Release 1.0.0 documents no review of individual findings or patches. Since then, every core finding has been reviewed
+  against the real source file by at least two independent LLM reviewers (more on disagreement) and labeled true positive,
+  policy, or false positive; core keeps only true positives (see the [README](README.md#dataset-layout)).
+  Patches are not reviewed beyond the analyzer re-run.
 
 ## Uses
 

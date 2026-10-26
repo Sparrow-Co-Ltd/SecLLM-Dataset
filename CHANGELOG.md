@@ -15,14 +15,14 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 ### Added
 
-- C dataset (`data/c/input.jsonl`): 2,604 records across 110 vulnerability types
-- TypeScript dataset (`data/typescript/input.jsonl`): 527 records across 15 vulnerability types
+- C dataset (`data/c/input.jsonl`): 1,794 records across 86 vulnerability types
+- TypeScript dataset (`data/typescript/input.jsonl`): 137 records across 12 vulnerability types
   Excludes 1 records flagged by GitHub push protection for credential patterns.
-- Python dataset (`data/python/input.jsonl`): 1,356 records across 38 vulnerability types
+- Python dataset (`data/python/input.jsonl`): 114 records across 21 vulnerability types
   Excludes 2 records flagged by GitHub push protection for credential patterns.
-- Go dataset (`data/go/input.jsonl`): 989 records across 22 vulnerability types
-- C++ dataset (`data/cpp/input.jsonl`): 3,814 records across 108 vulnerability types
-- JavaScript dataset (`data/javascript/input.jsonl`): 1,137 records across 37 vulnerability types
+- Go dataset (`data/go/input.jsonl`): 222 records across 12 vulnerability types
+- C++ dataset (`data/cpp/input.jsonl`): 2,479 records across 86 vulnerability types
+- JavaScript dataset (`data/javascript/input.jsonl`): 332 records across 26 vulnerability types
   Excludes 3 records flagged by GitHub push protection for credential patterns.
 - Project policies: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE, MAINTAINERS
 - Datasheet (`DATASHEET.md`), English README with Korean translation (`README.ko.md`), `CITATION.cff`
@@ -36,6 +36,9 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 - Core records that share a source file (`entireCode`) with a test record are removed: Python 31, C 69, C++ 73.
   Core records with the same vulnerability type and flagged line as a test record in another version of the same file
   are also removed: Go 1
+- Core records keep only findings labeled true positive in a per-finding review (at least two independent LLM reviews,
+  more on disagreement). Findings labeled policy or false positive, or without a review label, are removed:
+  JavaScript 805, TypeScript 390, Go 767, Python 1,242, C 810, C++ 1,335. Test inputs are not filtered
 
 ### Changed
 
@@ -46,6 +49,8 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
 
 - Java (`data/java/input.jsonl`): 2 records (4,617 → 4,615) with the same vulnerability type and flagged line as a test
   record in another version of the same file
+- Java (`data/java/input.jsonl`): 2,291 records (4,615 → 2,324, 101 → 88 vulnerability types) whose finding was labeled
+  policy (1,733) or false positive (388), or has no review label (170)
 
 ### Deprecated
 
