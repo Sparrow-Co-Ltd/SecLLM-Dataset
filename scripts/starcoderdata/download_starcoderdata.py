@@ -29,6 +29,9 @@ import pandas as pd
 import pyarrow.parquet as pq
 from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download, list_repo_files
+from huggingface_hub.errors import HFValidationError, LocalTokenNotFoundError, OfflineModeIsEnabled
+from huggingface_hub.utils import httpx
+from pyarrow import ArrowException
 from tqdm import tqdm
 
 
@@ -245,7 +248,12 @@ def fetch_repo_files(config: Config) -> list[str]:
             repo_type="dataset",
             token=config.token,
         )
-    except Exception as exc:  # noqa: BLE001 - surface HuggingFace auth/network context.
+    except (
+        httpx.HTTPError,
+        HFValidationError,
+        LocalTokenNotFoundError,
+        OfflineModeIsEnabled,
+    ) as exc:
         raise RuntimeError(
             "Failed to list HuggingFace dataset files. Check HF_TOKEN, gated dataset "
             f"access, repo id, and network connectivity. Original error: {exc}"
@@ -567,7 +575,7 @@ def main() -> int:
         print(f"Source manifest: {config.src_manifest_path}")
         print(f"Source directory: {config.src_dir}")
         return 0
-    except Exception as exc:  # noqa: BLE001 - CLI should emit concise failure text.
+    except (OSError, RuntimeError, ValueError, httpx.HTTPError, ArrowException) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
 
