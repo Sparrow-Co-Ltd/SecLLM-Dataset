@@ -25,6 +25,12 @@ keywords:
   - Java
 references:
   - type: software
+    title: "qwen35-9b-secfix-grpo-lead-step300-merged"
+    authors:
+      - name: "Sparrow Co., Ltd."
+    url: "https://huggingface.co/sparrow-co-ltd/qwen35-9b-secfix-grpo-lead-step300-merged"
+    license: Apache-2.0
+  - type: software
     title: "qwen35-9b-secfix-grpo-step180"
     authors:
       - name: "Sparrow Co., Ltd."
