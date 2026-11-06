@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "SFT training pipeline for Qwen3.5-9B security-fix model (LoRA)"
 requires-python = ">=3.12"
 dependencies = [
-    # Python 3.12 학습 환경 기준으로 버전 고정 (uv.lock 과 함께 관리)
+    # Versions pinned for the Python 3.12 training environment (managed together with uv.lock)
     "torch==2.9.1",
     "transformers==5.15.0",
     "peft==0.20.0",
@@ -12,10 +12,10 @@ dependencies = [
     "accelerate==1.14.0",
     "liger-kernel==0.8.1",
     "wandb==0.28.1",
-    "matplotlib==3.11.1",  # 보고서 figure 스크립트용 (학습 자체에는 불필요)
+    "matplotlib==3.11.1",  # for the report figure scripts (not needed for training itself)
 ]
 
-# torch 는 CUDA 12.8 빌드(+cu128) 사용 — uv 로 설치 시 아래 인덱스에서 받는다.
+# torch uses the CUDA 12.8 build (+cu128); uv installs it from the index below.
 [[tool.uv.index]]
 name = "pytorch-cu128"
 url = "https://download.pytorch.org/whl/cu128"
