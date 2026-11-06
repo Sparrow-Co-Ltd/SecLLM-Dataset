@@ -18,6 +18,7 @@ trajectory is used only if its final patch passed a SAST re-scan.
 ```
 train/
 ├── pyproject.toml, uv.lock            # training environment (torch cu128, transformers, peft, liger-kernel)
+├── .env.example                       # environment variables (copy to train/.env)
 ├── sft/
 │   ├── train_sft.py                   # LoRA SFT
 │   ├── srft_masking.py                # turn-boundary rendering + assistant-only label masking
@@ -49,7 +50,7 @@ directory `datas/sft/<dataset_id>/`:
 Pass one `--dataset` per teacher set to stage 1. The selection output defaults to
 `datas/sft/select/`; change it with `--out` / `--select-dir`. Nothing in the code is tied to
 a particular teacher or judge model: the teacher is whatever produced the generation files,
-and the judge is whichever model `--judge-url` serves.
+and the judge is whichever model the `JUDGE_API_URL` server serves.
 
 ## Environments
 
@@ -58,24 +59,37 @@ uv sync --project train          # -> train/.venv        (stages 1 and 3, traini
 uv sync --project train/judge    # -> train/judge/.venv  (stage 2, tests)
 ```
 
-Credentials (`WANDB_API_KEY`, `HF_TOKEN`) are read from the first `.env` found above
-`train/sft/`. Already-exported environment variables take precedence.
+Settings come from environment variables. Copy [`.env.example`](.env.example) to
+`train/.env` and fill it in:
+
+| Variable | Used by | Required |
+|---|---|---|
+| `WANDB_API_KEY` | `train_sft.py` | required unless `WANDB_MODE=offline` or `disabled` |
+| `WANDB_PROJECT`, `WANDB_ENTITY`, `WANDB_MODE` | `train_sft.py` | optional (project default `qwen35-secfix-sft`) |
+| `HF_TOKEN` | model/tokenizer downloads | optional (the base model is public) |
+| `JUDGE_API_URL`, `JUDGE_MODEL` | `judge_select.py` (stage 2) | required for stage 2 |
+| `JUDGE_API_KEY` | `judge_select.py` (stage 2) | optional (default `EMPTY`, accepted by local vLLM) |
+
+`train_sft.py` and `judge_select.py` read the first `.env` found walking up from their own
+directory. Already-exported environment variables take precedence, and `judge_select.py`'s
+`--judge-url` / `--judge-model` / `--api-key` flags override both. The other scripts do not
+read `.env`; export the variables first if they need them (`set -a; . train/.env; set +a`).
+`.env` is git-ignored.
 
 ## Pipeline
 
 ```bash
 SEL=datas/sft/select
-JUDGE_MODEL=<model name served by the judge server>
 
 # 1. Deterministic selection -> $SEL/candidates.jsonl, $SEL/selection_report.json
 train/.venv/bin/python train/sft/select/select_candidates.py \
     --dataset datas/sft/<teacher_set_a> --dataset datas/sft/<teacher_set_b> --out $SEL
 
 # 2. Judge only the findings whose SAST-passing runs produced different patches.
-#    Needs an OpenAI-compatible server (vLLM) serving the judge model; resumable.
+#    Needs an OpenAI-compatible server (vLLM) serving the judge model, set by
+#    JUDGE_API_URL / JUDGE_MODEL in train/.env; resumable.
 PYTHONPATH=train/judge/src train/judge/.venv/bin/python \
-    train/sft/select/judge_select.py --select-dir $SEL --profile thinking \
-    --judge-url http://127.0.0.1:8000/v1 --judge-model $JUDGE_MODEL
+    train/sft/select/judge_select.py --select-dir $SEL --profile thinking
 
 # 3. Export one trajectory per finding -> $SEL/export/{train,val}.jsonl, stats.json
 train/.venv/bin/python train/sft/select/export_sft.py --select-dir $SEL \

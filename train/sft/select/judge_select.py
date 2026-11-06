@@ -4,12 +4,14 @@
 Run from the repository root with the judge package environment::
 
     PYTHONPATH=train/judge/src train/judge/.venv/bin/python \
-        train/sft/select/judge_select.py \
-        --select-dir datas/sft/select --judge-model <judge-model>
+        train/sft/select/judge_select.py --select-dir datas/sft/select
 
-Requests go to an OpenAI-compatible judge server (for example vLLM) given by
-``--judge-url`` and ``--judge-model``; the model name is required. ``JUDGE_API_URL``
-from ``.env`` is not read, so the endpoint is always explicit on the command line.
+Requests go to an OpenAI-compatible judge server (for example vLLM). Its endpoint,
+model name and key come from ``JUDGE_API_URL`` / ``JUDGE_MODEL`` / ``JUDGE_API_KEY``:
+exported environment variables first, then the first ``.env`` found walking up from
+this script's directory (see ``train/.env.example``). ``--judge-url`` /
+``--judge-model`` / ``--api-key`` override them. The URL and model are required;
+the key defaults to ``EMPTY``, which a local vLLM server accepts.
 
 Decision per ``needs_judge`` input:
 
@@ -33,6 +35,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import re
 import sys
@@ -45,7 +48,7 @@ from typing import Any
 
 import httpx
 from secllm_judge.corpus import issue_from_record
-from secllm_judge.judge_client import JudgeSampling, parse_judge_content
+from secllm_judge.judge_client import JudgeSampling, find_dotenv, load_dotenv, parse_judge_content
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -59,7 +62,8 @@ from judge_prompt import (  # noqa: E402
 from trajectory_features import generation_files, iter_rows, patch_key  # noqa: E402
 
 SCHEMA_VERSION = "sft-select-judge.v1"
-DEFAULT_JUDGE_URL = "http://127.0.0.1:8000/v1"
+# argparse destination -> environment variable that supplies its default.
+JUDGE_ENV = {"judge_url": "JUDGE_API_URL", "judge_model": "JUDGE_MODEL", "api_key": "JUDGE_API_KEY"}
 
 PROFILES: dict[str, JudgeSampling] = {
     # Fix-Rate judge defaults with room for 4 candidate assessments + ranking.
@@ -76,13 +80,27 @@ PROFILES: dict[str, JudgeSampling] = {
 }
 
 
+def judge_env() -> dict[str, str]:
+    """Judge settings from the environment; exported variables win over ``.env``."""
+    dotenv = find_dotenv(Path(__file__).resolve().parent)
+    values = load_dotenv(dotenv) if dotenv is not None else {}
+    values.update({k: os.environ[k] for k in JUDGE_ENV.values() if k in os.environ})
+    # Empty entries (e.g. copied unchanged from .env.example) count as unset.
+    return {k: values[k] for k in JUDGE_ENV.values() if values.get(k)}
+
+
 def parse_args() -> argparse.Namespace:
+    env = judge_env()
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--select-dir", default="datas/sft/select")
     p.add_argument("--datasets-root", default="datas/sft", help="where <dataset_id>/ directories live")
-    p.add_argument("--judge-url", default=DEFAULT_JUDGE_URL)
-    p.add_argument("--judge-model", required=True, help="model name served at --judge-url")
-    p.add_argument("--api-key", default="EMPTY", help="local vLLM accepts any key")
+    p.add_argument("--judge-url", default=env.get("JUDGE_API_URL"),
+                   help="OpenAI-compatible base URL ending in /v1 (default: $JUDGE_API_URL)")
+    p.add_argument("--judge-model", default=env.get("JUDGE_MODEL"),
+                   help="model name served at --judge-url (default: $JUDGE_MODEL)")
+    p.add_argument("--api-key", default=env.get("JUDGE_API_KEY", "EMPTY"),
+                   help="bearer token for the judge server (default: $JUDGE_API_KEY, else EMPTY; "
+                   "a local vLLM server accepts any value)")
     p.add_argument("--profile", choices=sorted(PROFILES), default="nonthinking")
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--timeout", type=float, default=600.0)
@@ -91,7 +109,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--sample", type=int, default=0, help="judge only N randomly sampled inputs (calibration)")
     p.add_argument("--only", default="", help="comma-separated dataset_id:idx list to judge")
     p.add_argument("--retry-errors", action="store_true", help="re-judge inputs whose last record is judge_error")
-    return p.parse_args()
+    args = p.parse_args()
+    missing = [f"--{dest.replace('_', '-')} or {var}" for dest, var in JUDGE_ENV.items()
+               if dest != "api_key" and not getattr(args, dest)]
+    if missing:
+        p.error("judge server not configured; set " + ", ".join(missing))
+    return args
 
 
 # ---------------------------------------------------------------- inputs
