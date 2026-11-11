@@ -14,6 +14,7 @@ past governance decisions are recorded in [docs/decisions/](docs/decisions/).
 | Ask for removal of source code you hold rights to | [Removal request issue](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=removal-request.yml) |
 | Contribute records produced with another analysis tool | [Community data issue](https://github.com/Sparrow-Co-Ltd/SecLLM-Dataset/issues/new?template=community-data.yml) first, then a pull request into `data/community/<lang>/` |
 | Improve documentation, examples, or scripts | Pull request |
+| Fix or improve the training code under `train/` | Pull request, see [Training code](#training-code) |
 | Report a security vulnerability in this repository | Private report, see [SECURITY.md](SECURITY.md) |
 
 ### Core data is changed by the team only
@@ -92,6 +93,20 @@ table.
 | low | `낮음` |
 | info | `매우 낮음` |
 
+## Training Code
+
+`train/` holds the SFT training code. It is licensed under [Apache-2.0](train/LICENSE), and
+contributions to it are accepted under the same license
+([GDR-0003](docs/decisions/0003-train-code-license.md)).
+
+- Bug fixes and documentation go through a pull request.
+- Adding, replacing, or upgrading a direct dependency to a new major version is a Significant
+  decision: open a proposal issue first, and add or update the intake record under
+  [docs/evaluation/](docs/evaluation/POLICY.md).
+- Do not commit teacher trajectories, model weights, adapters, or `.env` files.
+- CI does not run the `train/` tests. Run the commands in [train/README.md](train/README.md#tests)
+  and state the result in the pull request.
+
 ## Pull Requests
 
 1. Fork the repository and create a branch.
@@ -101,7 +116,8 @@ table.
 
 ### Local checks
 
-Requires Python 3.9 or later; no third-party packages are needed.
+Requires Python 3.9 or later; no third-party packages are needed. Changes under `train/` need the
+additional checks in [Training code](#training-code).
 
 ```bash
 python scripts/validate.py --self-test

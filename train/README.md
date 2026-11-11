@@ -147,7 +147,19 @@ PYTHONPATH=train/judge/src:train/sft/select:train/sft \
 cd train/sft && uv run --project .. --with pytest python -m pytest tests/test_srft_masking.py -q
 ```
 
+CI does not run these tests: they need the two environments above, and `test_srft_masking.py` also
+needs the cached tokenizer. Run both before opening a pull request that changes `train/`
+(see [CONTRIBUTING.md](../CONTRIBUTING.md#training-code)).
+
+## Dependencies
+
+Both environments pin every package with hashes in `uv.lock`. Each direct dependency has an intake
+record under [docs/evaluation/](../docs/evaluation/POLICY.md), and adding or replacing one needs a
+proposal issue and a record first. The CUDA build of torch installs NVIDIA runtime wheels under
+NVIDIA's own license; they are downloaded at install time and are not part of this repository.
+
 ## License
 
-The license for the code under `train/` has not been decided yet. The repository-level
-[LICENSE](../LICENSE) (CC BY 4.0) was written for the dataset.
+The code under `train/` is licensed under the [Apache License 2.0](LICENSE), Copyright 2026 Sparrow
+Co., Ltd. The repository-level [LICENSE](../LICENSE) (CC BY 4.0) covers the dataset only; see
+[NOTICE.md](../NOTICE.md) and [GDR-0003](../docs/decisions/0003-train-code-license.md).

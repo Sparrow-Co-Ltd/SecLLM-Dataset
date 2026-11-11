@@ -7,7 +7,10 @@ vulnerability detection, explanation, and repair. Please read the scope below be
 
 **In scope** — please report privately:
 
-- Vulnerabilities in the tooling of this repository, such as `scripts/validate.py`
+- Vulnerabilities in the tooling of this repository, such as `scripts/validate.py` or the training
+  code under `train/`
+- Supply-chain issues in the Python packages pinned in `train/uv.lock` or `train/judge/uv.lock`
+  (for example, a compromised release, or a vulnerable version the training code is exposed to)
 - Supply-chain issues in the GitHub Actions workflows under `.github/workflows/`
   (for example, script injection or excessive token permissions)
 - Secrets (API keys, tokens, passwords, private keys) or personal data that were accidentally

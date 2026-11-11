@@ -14,6 +14,15 @@ CC BY 4.0 covers:
 - Vulnerable and safe example code (`dangerousExampleKo/En`, `safeExampleKo/En`)
 - Static analysis results and trace annotations (`issueRisk`, `issueLineNumber`, `contexts`)
 
+## License of the training code
+
+The code under `train/` is **not** covered by CC BY 4.0. It is licensed under the
+[Apache License 2.0](train/LICENSE), Copyright 2026 Sparrow Co., Ltd.
+(see [GDR-0003](docs/decisions/0003-train-code-license.md)).
+
+The third-party packages that `train/` installs are not part of this repository and keep their own
+licenses. The intake records in [docs/evaluation/](docs/evaluation/POLICY.md) list them.
+
 ## License of the original source code
 
 The `entireCode` field of each record contains **original source files from public open-source projects**.
@@ -63,6 +72,15 @@ CC BY 4.0이 적용되는 부분은 다음과 같습니다.
 - 취약점 유형명·유형 설명 (`issueNameKo/En`, `issueDescriptionKo/En`)
 - 위험 예시 코드·안전 예시 코드 (`dangerousExampleKo/En`, `safeExampleKo/En`)
 - 정적 분석 결과 및 추적 경로 주석 (`issueRisk`, `issueLineNumber`, `contexts`)
+
+## 학습 코드의 라이선스
+
+`train/` 아래의 코드는 CC BY 4.0의 적용 대상이 **아닙니다**. 이 코드는
+[Apache License 2.0](train/LICENSE)을 따르며, 저작권자는 Sparrow Co., Ltd.입니다(Copyright 2026 Sparrow Co., Ltd.,
+[GDR-0003](docs/decisions/0003-train-code-license.md) 참조).
+
+`train/`이 설치하는 서드파티 패키지는 이 저장소에 포함되어 있지 않으며 각자의 라이선스를 따릅니다.
+목록은 [docs/evaluation/](docs/evaluation/POLICY.md)의 intake 기록에 있습니다.
 
 ## 원본 소스코드의 라이선스
 

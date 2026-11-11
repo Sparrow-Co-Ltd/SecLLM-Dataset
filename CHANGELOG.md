@@ -47,8 +47,16 @@ Each release lists the SHA-256 of its data files. Verify with `sha256sum data/ja
   more on disagreement). Findings labeled policy or false positive, or without a review label, are removed:
   JavaScript 805, TypeScript 390, Go 767, Python 1,242, C 810, C++ 1,335. Test inputs are not filtered
 
+- Training code (`train/`): LoRA SFT for `Qwen/Qwen3.5-9B` and the pipeline that selects the SFT trajectories, with
+  their own Python environments (`train/uv.lock`, `train/judge/uv.lock`). No data file changes
+- Apache-2.0 license for the code under `train/` (`train/LICENSE`, GDR-0003); CC BY 4.0 still covers the dataset only
+- Intake records for the direct Python dependencies of `train/` (`docs/evaluation/intake-*.md`)
+
 ### Changed
 
+- Evaluation policy: Python packages need intake records; license lists, re-evaluation rules, vulnerability response
+  scope, and the SBOM section cover the `train/` lock files
+- SECURITY, CONTRIBUTING, the pull request template, the OSS evaluation form, and CODEOWNERS cover `train/`
 - NOTICE: English translation added; file-level license headers in `entireCode` take precedence
   (the upstream corpus filtered by repository-level license); removal requests go through an issue form
 

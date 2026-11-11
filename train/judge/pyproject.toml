@@ -7,6 +7,7 @@ name = "secllm-judge"
 version = "0.1.0"
 description = "LLM-judge prompt blocks, diff renderer, typed contracts and client used by SFT trajectory selection"
 requires-python = "==3.12.*"
+license = "Apache-2.0"
 dependencies = [
     "httpx==0.28.1",
     "pydantic==2.12.5",
