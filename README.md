@@ -64,6 +64,9 @@ SecLLM-Dataset/
     └── community/             # Community track: data from third-party tools (see below)
 ```
 
+The repository also holds `scripts/` (the validator and the upstream corpus download scripts) and `train/`
+(the SFT training code of the current model, see [Training code](#training-code)).
+
 Files are **JSON Lines**: one line is one vulnerability instance (a JSON object).
 Each record pairs vulnerability information (`input`) with a patch that fixes it (`output`).
 
@@ -376,6 +379,13 @@ and a HuggingFace token with access to the gated dataset.
 uv run scripts/starcoderdata/download_starcoderdata.py --language java --max-rows 5000
 ```
 
+## Training code
+
+[train/](train/README.md) holds the code of the SFT stage of the current model: LoRA fine-tuning of `Qwen/Qwen3.5-9B`
+and the pipeline that selects one SAST-verified teacher trajectory per finding. The teacher trajectories, the GRPO
+stage, and the adapter merge step are not in this repository. The code needs a CUDA GPU and its own Python
+environments (`train/uv.lock`, `train/judge/uv.lock`); nothing else in the repository depends on it.
+
 ## Citation
 
 Citation metadata is in [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button).
@@ -421,6 +431,8 @@ The compilation and annotations of SecLLM-Dataset are licensed under
 
 The `entireCode` field contains original source files from public open-source projects. That code is **not**
 covered by CC BY 4.0 and remains under its original licenses. See [NOTICE.md](NOTICE.md) for the exact scope.
+
+The training code under `train/` is licensed under the [Apache License 2.0](train/LICENSE), not CC BY 4.0.
 
 ## Acknowledgments
 

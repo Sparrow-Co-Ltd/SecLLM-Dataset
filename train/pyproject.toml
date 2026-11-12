@@ -3,6 +3,7 @@ name = "secllm-train"
 version = "0.1.0"
 description = "SFT training pipeline for Qwen3.5-9B security-fix model (LoRA)"
 requires-python = ">=3.12"
+license = "Apache-2.0"
 dependencies = [
     # Versions pinned for the Python 3.12 training environment (managed together with uv.lock)
     "torch==2.9.1",

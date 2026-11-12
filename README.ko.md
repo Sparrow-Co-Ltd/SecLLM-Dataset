@@ -63,6 +63,9 @@ SecLLM-Dataset/
     └── community/             # 커뮤니티 트랙: 서드파티 도구로 만든 데이터 (아래 참조)
 ```
 
+저장소에는 이 밖에 `scripts/`(검증기와 원본 코퍼스 다운로드 스크립트)와 `train/`(현재 모델의 SFT 학습 코드,
+[학습 코드](#학습-코드) 참조)이 있습니다.
+
 파일 형식은 **JSON Lines** 입니다. 한 줄이 하나의 취약점 인스턴스(JSON 객체)에 해당하며,
 각 레코드는 취약점 정보(`input`)와 해당 취약점을 해결하는 패치(`output`)의 쌍으로 구성됩니다.
 
@@ -373,6 +376,13 @@ gated 데이터셋 접근 권한이 있는 HuggingFace 토큰이 필요합니다
 uv run scripts/starcoderdata/download_starcoderdata.py --language java --max-rows 5000
 ```
 
+## 학습 코드
+
+[train/](train/README.md)에는 현재 모델의 SFT 단계 코드가 있습니다. `Qwen/Qwen3.5-9B`의 LoRA 미세조정 코드와,
+취약점마다 SAST로 검증된 교사 궤적 하나를 고르는 선별 파이프라인입니다. 교사 궤적, GRPO 단계, 어댑터 병합 단계는
+이 저장소에 없습니다. 실행에는 CUDA GPU와 별도의 Python 환경(`train/uv.lock`, `train/judge/uv.lock`)이 필요하며,
+저장소의 다른 부분은 이 코드에 의존하지 않습니다.
+
 ## 인용
 
 인용 정보는 [CITATION.cff](CITATION.cff)에 있습니다(GitHub의 "Cite this repository" 버튼으로도 확인할 수 있습니다).
@@ -418,6 +428,8 @@ SecLLM-Dataset의 편집물과 주석 데이터는
 
 `entireCode` 필드에는 공개 오픈소스 프로젝트의 소스 파일 원문이 들어 있습니다. 이 코드는 CC BY 4.0의
 적용 대상이 **아니며** 각 원저작물의 라이선스를 따릅니다. 정확한 적용 범위는 [NOTICE.md](NOTICE.md)를 참고하세요.
+
+`train/` 아래의 학습 코드는 CC BY 4.0이 아니라 [Apache License 2.0](train/LICENSE)을 따릅니다.
 
 ## 지원 사업 표기
 

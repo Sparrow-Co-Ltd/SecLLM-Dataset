@@ -1,5 +1,5 @@
 name: OSS evaluation
-description: Request an evaluation before adopting an external component (dataset, tool, GitHub Action) or before a release.
+description: Request an evaluation before adopting an external component (dataset, tool, GitHub Action, Python package) or before a release.
 title: "[evaluation] "
 labels: ["evaluation"]
 body:
@@ -20,7 +20,7 @@ body:
     id: target
     attributes:
       label: Target and exact version, commit, or revision
-      placeholder: "owner/repo@<40-char SHA> (vX.Y.Z)"
+      placeholder: "owner/repo@<40-char SHA> (vX.Y.Z), or package==X.Y.Z and the lock file that pins it"
     validations:
       required: true
   - type: input

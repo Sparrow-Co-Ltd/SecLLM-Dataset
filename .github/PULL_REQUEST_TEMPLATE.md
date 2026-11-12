@@ -7,6 +7,7 @@
 - [ ] Documentation
 - [ ] Script / CI
 - [ ] Community data (`data/community/<lang>/`) — proposal issue: #
+- [ ] Training code (`train/`)
 - [ ] Other:
 
 Core data in `data/java/` is not changed through external PRs. Report data problems with the
@@ -18,3 +19,4 @@ Core data in `data/java/` is not changed through external PRs. Report data probl
 - [ ] If `README.md` changed, `README.ko.md` is updated too (and vice versa)
 - [ ] Every commit is signed off (`git commit -s`) under the [DCO](https://developercertificate.org/)
 - [ ] For community data: every record has complete `meta`, an allowlisted `sourceLicense`, and `patchVerified: true`
+- [ ] For training code: the `train/` tests were run locally (CI does not run them), and a new or major-version dependency has a proposal issue and an intake record
